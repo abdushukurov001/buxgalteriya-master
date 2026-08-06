@@ -1,0 +1,310 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft, Check, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { EntryCard } from "@/components/EntryCard";
+import { ACCOUNT_MAP } from "@/data/accounts";
+import { MODULES } from "@/data/modules";
+import { useLang } from "@/lib/i18n";
+import { useProgress } from "@/lib/progress";
+import { generateTest, type Question } from "@/lib/questions";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/modules/$id")({
+  head: () => ({
+    meta: [
+      { title: "Mavzu — schotlar, pravodkalar va test | Hisobchi" },
+      {
+        name: "description",
+        content: "Mavzuga oid schotlar, pravodkalarning Dt/Kt mantiqi va 30 savoldan iborat test.",
+      },
+      { property: "og:title", content: "Mavzu — schotlar, pravodkalar va test" },
+      { property: "og:description", content: "Har bir pravodka nega shunday yozilishini tushunib oling." },
+    ],
+  }),
+  component: ModulePage,
+});
+
+function kindLabelKey(kind: string) {
+  if (kind === "active") return "active" as const;
+  if (kind === "passive") return "passive" as const;
+  if (kind === "contra-active") return "contra" as const;
+  if (kind === "income") return "income" as const;
+  return "expense" as const;
+}
+
+function ModulePage() {
+  const { id } = Route.useParams();
+  const moduleId = Number(id);
+  const mod = MODULES.find((m) => m.id === moduleId);
+  const { t, tr } = useLang();
+  const [tab, setTab] = useState<"read" | "test">("read");
+
+  if (!mod) {
+    return (
+      <div className="paper-card p-6 text-center text-sm text-muted-foreground">
+        <p>{t("lockedMsg")}</p>
+        <Link to="/" className="mt-3 inline-block text-emerald-ink underline">
+          {t("backToModules")}
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <Link to="/" className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+        <ArrowLeft className="h-3.5 w-3.5" />
+        {t("backToModules")}
+      </Link>
+
+      <header className="space-y-1">
+        <p className="font-mono text-xs text-gold">
+          {t("navModules")} {mod.id}/{MODULES.length}
+        </p>
+        <h1 className="font-serif text-xl font-semibold">{tr(mod.title)}</h1>
+        <p className="text-[13px] text-muted-foreground">{tr(mod.summary)}</p>
+      </header>
+
+      <div className="grid grid-cols-2 gap-1 rounded-md border border-border bg-secondary p-1">
+        {(["read", "test"] as const).map((k) => (
+          <button
+            key={k}
+            onClick={() => setTab(k)}
+            className={cn(
+              "rounded-sm px-3 py-2 text-sm font-medium transition-colors",
+              tab === k ? "bg-card text-foreground shadow-sm" : "text-muted-foreground",
+            )}
+          >
+            {k === "read" ? t("read") : t("test")}
+          </button>
+        ))}
+      </div>
+
+      {tab === "read" ? (
+        <div className="space-y-5">
+          <section className="space-y-2">
+            <h2 className="font-serif text-base font-semibold">{t("accounts")}</h2>
+            <ul className="paper-card divide-y divide-border">
+              {mod.accounts.map((code) => {
+                const acc = ACCOUNT_MAP[code];
+                if (!acc) return null;
+                return (
+                  <li key={code} className="space-y-1 p-3">
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2">
+                      <span className="shrink-0 rounded bg-secondary px-2 py-0.5 font-mono text-xs">{code}</span>
+                      <span className="min-w-0 truncate text-sm font-medium">{tr(acc.name)}</span>
+                    </div>
+                    <p className="text-[11px] tracking-wide text-emerald-ink uppercase">
+                      {t(kindLabelKey(acc.kind))}
+                    </p>
+                    <p className="text-[13px] text-muted-foreground">{tr(acc.note)}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="font-serif text-base font-semibold">{t("entries")}</h2>
+            {mod.entries.map((e) => (
+              <EntryCard key={e.id} entry={e} />
+            ))}
+          </section>
+        </div>
+      ) : (
+        <TestRunner moduleId={mod.id} onReview={() => setTab("read")} />
+      )}
+    </div>
+  );
+}
+
+function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => void }) {
+  const { t, tr, lang } = useLang();
+  const { saveResult, passMark } = useProgress();
+  const navigate = useNavigate();
+  const questions = useMemo(() => generateTest(moduleId), [moduleId]);
+
+  const [started, setStarted] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [wrong, setWrong] = useState<{ q: Question; chosen: number }[]>([]);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+
+  const q = questions[index];
+
+  const promptTitle = (question: Question) => {
+    switch (question.kind) {
+      case "entry":
+        return t("chooseEntry");
+      case "op":
+        return t("chooseOp");
+      case "type":
+        return t("chooseType");
+      default:
+        return t("findWrong");
+    }
+  };
+
+  if (!started) {
+    return (
+      <div className="paper-card space-y-3 p-5 text-center">
+        <p className="font-mono text-3xl">{questions.length}</p>
+        <p className="text-sm text-muted-foreground">
+          {t("question")} · {passMark}% = {t("done")}
+        </p>
+        <button
+          onClick={() => setStarted(true)}
+          className="w-full rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
+        >
+          {t("startTest")}
+        </button>
+      </div>
+    );
+  }
+
+  if (finished) {
+    const percent = Math.round((score / questions.length) * 100);
+    const passed = percent >= passMark;
+    return (
+      <div className="space-y-4">
+        <div className={cn("paper-card space-y-2 p-6 text-center", passed && "border-emerald-ink/50")}>
+          <p className="text-xs tracking-wide text-muted-foreground uppercase">{t("result")}</p>
+          <p className={cn("font-mono text-5xl", passed ? "text-emerald-ink" : "text-destructive")}>
+            {percent}%
+          </p>
+          <p className="text-sm">{passed ? t("passed") : t("failed")}</p>
+        </div>
+
+        {!passed && wrong.length > 0 && (
+          <section className="space-y-2">
+            <h3 className="font-serif text-base font-semibold">{t("mistakes")}</h3>
+            {wrong.map(({ q: wq }, i) => (
+              <div key={`${wq.id}-${i}`} className="paper-card space-y-2 p-3">
+                <p className="text-[13px]">{tr(wq.prompt)}</p>
+                <p className="rounded bg-emerald-soft px-2 py-1 font-mono text-xs text-emerald-ink">
+                  {wq.options[wq.correct]?.[lang]}
+                </p>
+                <p className="text-[12px] text-muted-foreground">{tr(wq.explain)}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        <div className="grid gap-2">
+          {!passed && (
+            <button
+              onClick={onReview}
+              className="rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
+            >
+              {t("reviewMaterial")}
+            </button>
+          )}
+          <button
+            onClick={() => navigate({ to: "/" })}
+            className="rounded-md border border-border px-4 py-3 text-sm"
+          >
+            {t("backToModules")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!q) return null;
+
+  const answer = (i: number) => {
+    if (picked !== null) return;
+    setPicked(i);
+    if (i === q.correct) setScore((s) => s + 1);
+    else setWrong((w) => [...w, { q, chosen: i }]);
+  };
+
+  const next = () => {
+    if (index + 1 >= questions.length) {
+      const finalScore = score;
+      const percent = Math.round((finalScore / questions.length) * 100);
+      saveResult(
+        moduleId,
+        percent,
+        wrong.map((w) => w.q.tag),
+      );
+      setFinished(true);
+      return;
+    }
+    setIndex((n) => n + 1);
+    setPicked(null);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
+          <div
+            className="h-full rounded-full bg-gold transition-all"
+            style={{ width: `${((index + 1) / questions.length) * 100}%` }}
+          />
+        </div>
+        <span className="font-mono text-xs text-muted-foreground">
+          {index + 1}/{questions.length}
+        </span>
+      </div>
+
+      <div className="paper-card space-y-3 p-4">
+        <p className="text-[11px] tracking-wide text-gold uppercase">{promptTitle(q)}</p>
+        <p className={cn("text-sm leading-relaxed", q.kind === "op" && "font-mono text-base")}>
+          {tr(q.prompt)}
+        </p>
+      </div>
+
+      <ul className="space-y-2">
+        {q.options.map((opt, i) => {
+          const isCorrect = i === q.correct;
+          const chosen = picked === i;
+          return (
+            <li key={i}>
+              <button
+                onClick={() => answer(i)}
+                disabled={picked !== null}
+                className={cn(
+                  "paper-card grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 p-3 text-left text-sm transition-colors",
+                  opt.mono && "font-mono",
+                  picked !== null && isCorrect && "border-emerald-ink bg-emerald-soft",
+                  picked !== null && chosen && !isCorrect && "border-destructive bg-danger-soft",
+                )}
+              >
+                <span className="min-w-0">{opt[lang]}</span>
+                {picked !== null && isCorrect && <Check className="h-4 w-4 shrink-0 text-emerald-ink" />}
+                {picked !== null && chosen && !isCorrect && (
+                  <X className="h-4 w-4 shrink-0 text-destructive" />
+                )}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      {picked !== null && (
+        <div className="space-y-3">
+          <div
+            className={cn(
+              "rounded-md border p-3 text-[13px]",
+              picked === q.correct
+                ? "border-emerald-ink/40 bg-emerald-soft text-emerald-ink"
+                : "border-destructive/40 bg-danger-soft text-destructive",
+            )}
+          >
+            <p className="mb-1 font-semibold">{picked === q.correct ? t("correct") : t("wrong")}</p>
+            <p className="text-foreground/80">{tr(q.explain)}</p>
+          </div>
+          <button
+            onClick={next}
+            className="w-full rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
+          >
+            {index + 1 >= questions.length ? t("finish") : t("next")}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

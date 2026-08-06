@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ReferenceRouteImport } from './routes/reference'
+import { Route as ModulesIdRouteImport } from './routes/modules.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const ReferenceRoute = ReferenceRouteImport.update({
   path: '/reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesIdRoute = ModulesIdRouteImport.update({
+  id: '/modules/$id',
+  path: '/modules/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/modules/$id': typeof ModulesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/modules/$id': typeof ModulesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/modules/$id': typeof ModulesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/reference'
+  fullPaths: '/' | '/profile' | '/reference' | '/modules/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/reference'
-  id: '__root__' | '/' | '/profile' | '/reference'
+  to: '/' | '/profile' | '/reference' | '/modules/$id'
+  id: '__root__' | '/' | '/profile' | '/reference' | '/modules/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProfileRoute: typeof ProfileRoute
   ReferenceRoute: typeof ReferenceRoute
+  ModulesIdRoute: typeof ModulesIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/$id': {
+      id: '/modules/$id'
+      path: '/modules/$id'
+      fullPath: '/modules/$id'
+      preLoaderRoute: typeof ModulesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProfileRoute: ProfileRoute,
   ReferenceRoute: ReferenceRoute,
+  ModulesIdRoute: ModulesIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

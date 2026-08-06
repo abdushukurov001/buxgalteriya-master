@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageProvider } from "../lib/i18n";
 import { ProgressProvider } from "../lib/progress";
 import { AppShell } from "../components/AppShell";
+import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -141,6 +142,7 @@ function RootComponent() {
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </AppShell>
+          <Toaster position="top-center" />
         </ProgressProvider>
       </LanguageProvider>
     </QueryClientProvider>

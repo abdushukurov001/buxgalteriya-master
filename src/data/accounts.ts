@@ -7,51 +7,96 @@ export type Account = {
   note: { uz: string; ru: string };
 };
 
-/** O'zbekiston Respublikasi buxgalteriya hisobi schyotlar rejasi (asosiy schyotlar). */
+/** O'zbekiston Respublikasi buxgalteriya hisobi schyotlar rejasi (21-son BHMS bo'yicha rasmiy schyotlar). */
 export const ACCOUNTS: Account[] = [
   {
     code: "0130",
-    name: { uz: "Asosiy vositalar (mashinalar va uskunalar)", ru: "Основные средства (машины и оборудование)" },
+    name: { uz: "Mashina va asbob-uskunalar (Asosiy vositalar)", ru: "Машины и оборудование (Основные средства)" },
     kind: "active",
     note: {
-      uz: "Bino, uskuna, transport kabi uzoq muddatli aktivlar boshlang'ich qiymatda yuritiladi (0110 — binolar, 0120 — inshootlar, 0130 — mashinalar, 0140 — transport, 0150 — mebel va jihozlar, 0160 — ko'p yillik daraxtlar, 0170 — ishchi va mahsuldor hayvonlar, 0190 — boshqa AV). Kirim — debet, chiqim — kredit.",
-      ru: "Здания, оборудование, транспорт учитываются по первоначальной стоимости (0110 — здания, 0120 — сооружения, 0130 — машины, 0140 — транспорт, 0150 — мебель, 0160 — многолетние насаждения, 0170 — рабочий скот, 0190 — прочие ОС). Поступление — дебет, выбытие — кредит.",
+      uz: "Mashina, kompyuter va uskunalar boshlang'ich qiymatda yuritiladi (0110 — yer, 0120 — binolar, 0130 — mashinalar, 0160 — transport). Kirim — debet, chiqim — kredit.",
+      ru: "Машины, компьютеры и оборудование учитываются по первоначальной стоимости (0110 — земля, 0120 — здания, 0130 — машины, 0160 — транспорт). Поступление — дебет, выбытие — кредит.",
+    },
+  },
+  {
+    code: "0210",
+    name: { uz: "Asosiy vositalarning eskirishi (amortizatsiya)", ru: "Износ основных средств (амортизация)" },
+    kind: "contra-active",
+    note: {
+      uz: "Kontr-aktiv schyot (0210-0290): eskirish hisoblanganda kreditlanadi, aktiv sotilganda/hisobdan chiqarilganda debetlanadi.",
+      ru: "Контр-активный счёт (0210-0290): начисление износа — кредит, списание при выбытии — дебет.",
     },
   },
   {
     code: "0230",
-    name: { uz: "Asosiy vositalar eskirishi (amortizatsiya)", ru: "Износ основных средств (амортизация)" },
+    name: { uz: "Mashina va asbob-uskunalarning eskirishi", ru: "Износ машин и оборудования" },
     kind: "contra-active",
     note: {
-      uz: "Kontr-aktiv (passiv xarakterli) schyot (0210 — binolar eskirishi, 0220 — inshootlar, 0230 — mashinalar, 0240 — transport, 0250 — mebel, 0290 — boshqa AV eskirishi): eskirish hisoblanganda kreditlanadi, aktiv chiqib ketganda debetlanadi.",
-      ru: "Контр-активный (пассивный по характеру) счёт (0210 — износ зданий, 0220 — сооружений, 0230 — машин, 0240 — транспорта, 0250 — мебели, 0290 — прочих ОС): начисление износа — кредит, списание при выбытии — дебет.",
+      uz: "Uskuna va mashinalar bo'yicha jamlangan eskirish (kontr-aktiv).",
+      ru: "Накопленный износ по машинам и оборудованию (контр-активный).",
+    },
+  },
+  {
+    code: "0410",
+    name: { uz: "Patentlar, litsenziyalar va nou-xau (Nomoddiy aktivlar)", ru: "Патенты, лицензии и ноу-хау (Нематериальные активы)" },
+    kind: "active",
+    note: {
+      uz: "Nomoddiy aktivlar (litsenziyalar, dasturiy ta'minot). Kirim — debet, chiqim — kredit.",
+      ru: "Нематериальные активы (лицензии, ПО). Поступление — дебет, выбытие — кредит.",
+    },
+  },
+  {
+    code: "0510",
+    name: { uz: "Nomoddiy aktivlar amortizatsiyasi", ru: "Амортизация нематериальных активов" },
+    kind: "contra-active",
+    note: {
+      uz: "Nomoddiy aktivlar bo'yicha jamlangan amortizatsiya (kontr-aktiv).",
+      ru: "Накопленная амортизация нематериальных активов (контр-активный).",
     },
   },
   {
     code: "0710",
-    name: { uz: "Tugallanmagan qurilish", ru: "Незавершённое строительство" },
+    name: { uz: "O'rnatiladigan asbob-uskunalar (mahalliy)", ru: "Оборудование к установке (отечественное)" },
     kind: "active",
     note: {
-      uz: "Qurilish jarayonidagi obyektga to'plangan xarajatlar. Obyekt ishga tushganda 0130 ga o'tkaziladi.",
-      ru: "Накопленные затраты по строящемуся объекту. При вводе объект переносится на 0130.",
+      uz: "Montaj talab qiladigan uskunalar omborga kirim qilinganda 0710 debetlanadi. Montajga berilganda 0720/0810 ga o'tkaziladi.",
+      ru: "Оборудование к установке оприходуется по дебету 0710. При передаче в монтаж переносится на 0720/0810.",
     },
   },
   {
     code: "0720",
-    name: { uz: "O'rnatiladigan uskunalar", ru: "Оборудование к установке" },
+    name: { uz: "O'rnatiladigan asbob-uskunalar (xorijiy / montajdagilar)", ru: "Оборудование к установке (импортное / в монтаже)" },
     kind: "active",
     note: {
-      uz: "Sotib olingan, lekin hali o'rnatilmagan uskunalar. O'rnatilgach 0130 ga o'tadi.",
-      ru: "Приобретённое, но ещё не смонтированное оборудование. После монтажа переходит на 0130.",
+      uz: "Montaj va o'rnatish jarayonidagi asbob-uskunalar. O'rnatib bo'lingach 0810 ga, so'ng 0130 ga o'tkaziladi.",
+      ru: "Оборудование в процессе монтажа и установки. После завершения переносится на 0810, затем на 0130.",
+    },
+  },
+  {
+    code: "0810",
+    name: { uz: "Tugallanmagan qurilish (kapital qo'yilmalar)", ru: "Незавершённое строительство (капвложения)" },
+    kind: "active",
+    note: {
+      uz: "Qurilayotgan va tayyorlanayotgan asosiy vosita obyektiga to'plangan barcha kapital xarajatlar. Ishga tushgach 0130 ga o'tkaziladi.",
+      ru: "Все капитальные затраты, накапливаемые по строящемуся объекту ОС. При вводе в эксплуатацию переносится на 0130.",
     },
   },
   {
     code: "0820",
-    name: { uz: "Uzoq muddatli aktivlarni sotib olish (kapital qo'yilmalar)", ru: "Приобретение долгосрочных активов (капвложения)" },
+    name: { uz: "Asosiy vositalarni xarid qilish", ru: "Приобретение основных средств" },
     kind: "active",
     note: {
-      uz: "Aktiv foydalanishga tayyor bo'lgunga qadar barcha xarajatlar shu yerda to'planadi.",
-      ru: "Здесь накапливаются все затраты до момента готовности актива к использованию.",
+      uz: "Asosiy vositalarni sotib olish xarajatlari to'planadigan aktiv schyot.",
+      ru: "Активный счёт для накопления расходов по приобретению основных средств.",
+    },
+  },
+  {
+    code: "0830",
+    name: { uz: "Nomoddiy aktivlarni xarid qilish", ru: "Приобретение нематериальных активов" },
+    kind: "active",
+    note: {
+      uz: "Nomoddiy aktivlar (litsenziya, dastur) sotib olish xarajatlari to'planadi.",
+      ru: "Затраты на приобретение нематериальных активов (лицензий, ПО).",
     },
   },
   {
@@ -65,11 +110,20 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "1080",
-    name: { uz: "Boshqa materiallar (inventar, ehtiyot qismlar)", ru: "Прочие материалы (инвентарь, запчасти)" },
+    name: { uz: "Inventar va xo'jalik jihozlari", ru: "Инвентарь и хозяйственные принадлежности" },
     kind: "active",
     note: {
-      uz: "Asosiy vosita darajasiga yetmaydigan mayda inventar va materiallar.",
-      ru: "Мелкий инвентарь и материалы, не достигающие критериев основных средств.",
+      uz: "Inventarlar va xo'jalik jihozlari zaxirasi.",
+      ru: "Запас инвентаря и хозяйственных принадлежностей.",
+    },
+  },
+  {
+    code: "1510",
+    name: { uz: "Materiallarni tayyorlash va xarid qilish", ru: "Заготовление и приобретение материалов" },
+    kind: "active",
+    note: {
+      uz: "Materiallarni tayyorlash va sotib olish xarajatlarini to'plash schyoti.",
+      ru: "Счёт для заготовления и приобретения материалов.",
     },
   },
   {
@@ -82,8 +136,26 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "2310",
+    name: { uz: "Yordamchi ishlab chiqarish", ru: "Вспомогательное производство" },
+    kind: "active",
+    note: {
+      uz: "Yordamchi sex va bo'linmalar xarajatlarini hisobga olish schyoti.",
+      ru: "Учёт затрат вспомогательных цехов и подразделений.",
+    },
+  },
+  {
+    code: "2510",
+    name: { uz: "Umumishlab chiqarish xarajatlari", ru: "Общепроизводственные расходы" },
+    kind: "active",
+    note: {
+      uz: "Sex va umumishlab chiqarish ehtiyojlari uchun xarajatlar.",
+      ru: "Затраты на цеховые и общепроизводственные нужды.",
+    },
+  },
+  {
     code: "2810",
-    name: { uz: "Omberdagi tayyor mahsulot", ru: "Готовая продукция на складе" },
+    name: { uz: "Ombordagi tayyor mahsulot", ru: "Готовая продукция на складе" },
     kind: "active",
     note: {
       uz: "Ishlab chiqarilgan va sotishga tayyor mahsulot zaxirasi.",
@@ -92,7 +164,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "2910",
-    name: { uz: "Omberdagi tovarlar", ru: "Товары на складе" },
+    name: { uz: "Ombordagi tovarlar", ru: "Товары на складе" },
     kind: "active",
     note: {
       uz: "Qayta sotish uchun sotib olingan tovarlar. Sotilganda tannarx sifatida hisobdan chiqariladi.",
@@ -100,8 +172,17 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "2920",
+    name: { uz: "Chakana savdodagi tovarlar", ru: "Товары в розничной торговле" },
+    kind: "active",
+    note: {
+      uz: "Chakana savdo shoxobchasiga o'tkazilgan tovarlar.",
+      ru: "Товары, переданные в розничную торговлю.",
+    },
+  },
+  {
     code: "4010",
-    name: { uz: "Xaridorlardan olinadigan schyotlar", ru: "Счета к получению от покупателей" },
+    name: { uz: "Xaridorlar va buyurtmachilardan olinadigan schyotlar", ru: "Счета к получению от покупателей и заказчиков" },
     kind: "active",
     note: {
       uz: "Debitorlik qarzi: xaridor bizga qarzdor. Qarz paydo bo'lsa — debet, to'lansa — kredit.",
@@ -110,16 +191,25 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "4210",
-    name: { uz: "Xodimlarga berilgan avanslar (hisobdor summalar)", ru: "Авансы, выданные персоналу (подотчётные суммы)" },
+    name: { uz: "Mehnat haqi bo'yicha berilgan bo'naklar", ru: "Авансы по оплате труда" },
     kind: "active",
     note: {
-      uz: "Xodim hisobdor summani qaytarishi yoki hisobot berishi shart — shuning uchun bu debitorlik.",
-      ru: "Работник обязан отчитаться или вернуть сумму — поэтому это дебиторка.",
+      uz: "Xodimlarga ish haqi hisobidan oldindan berilgan avanslar.",
+      ru: "Авансы, выданные работникам в счёт заработной платы.",
+    },
+  },
+  {
+    code: "4220",
+    name: { uz: "Xizmat safarlariga berilgan bo'naklar (hisobdor summalar)", ru: "Авансы на командировочные расходы (подотчёт)" },
+    kind: "active",
+    note: {
+      uz: "Xizmat safari va xo'jalik xarajatlari uchun hisobdor shaxsga berilgan avans.",
+      ru: "Аванс, выданный подотчётному лицу на командировку и хозрасходы.",
     },
   },
   {
     code: "4310",
-    name: { uz: "Ta'minotchilarga berilgan avanslar", ru: "Авансы, выданные поставщикам" },
+    name: { uz: "Mol yetkazib beruvchilar va pudratchilarga berilgan bo'naklar", ru: "Авансы, выданные поставщикам и подрядчикам" },
     kind: "active",
     note: {
       uz: "Oldindan to'langan pul — ta'minotchi bizga tovar/xizmat qarzdor bo'lib qoladi.",
@@ -128,7 +218,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "4410",
-    name: { uz: "Byudjetga to'langan avanslar (hisobga olinadigan QQS)", ru: "Авансовые платежи в бюджет (зачётный НДС)" },
+    name: { uz: "Byudjetga bo'nak to'lovlari (kiruvchi QQS)", ru: "Авансовые платежи в бюджет (входящий НДС)" },
     kind: "active",
     note: {
       uz: "Kirim QQS va boshqa avans soliq to'lovlari — kelajakda majburiyatdan hisobga olinadi.",
@@ -137,7 +227,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "4610",
-    name: { uz: "Ta'sischilarning ustav kapitaliga ulush bo'yicha qarzi", ru: "Задолженность учредителей по вкладам в уставный капитал" },
+    name: { uz: "Ustav kapitaliga ta'sischilarning ulushlari bo'yicha qarzi", ru: "Задолженность учредителей по вкладам в уставный капитал" },
     kind: "active",
     note: {
       uz: "Ta'sis hujjatida e'lon qilingan, lekin hali kiritilmagan ulush — ta'sischi qarzi.",
@@ -146,7 +236,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "4730",
-    name: { uz: "Xodimlarning moddiy zararni qoplash bo'yicha qarzi", ru: "Задолженность персонала по возмещению ущерба" },
+    name: { uz: "Moddiy zararni qoplash bo'yicha xodimlarning qarzi", ru: "Задолженность персонала по возмещению ущерба" },
     kind: "active",
     note: {
       uz: "Aybdor xodimga yuklangan kamomad summasi — u qoplab berishi kerak.",
@@ -155,7 +245,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "5010",
-    name: { uz: "Kassa", ru: "Касса" },
+    name: { uz: "Kassadagi pul mablag'lari", ru: "Денежные средства в кассе" },
     kind: "active",
     note: {
       uz: "Naqd pul. Kirim — debet, chiqim — kredit. Qoldiq faqat debet bo'ladi.",
@@ -164,7 +254,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "5110",
-    name: { uz: "Hisob-kitob (bank) schyoti", ru: "Расчётный счёт" },
+    name: { uz: "Hisob-kitob schyotidagi pul mablag'lari", ru: "Денежные средства на расчётном счёте" },
     kind: "active",
     note: {
       uz: "Bankdagi milliy valyutadagi mablag'. Tushum — debet, to'lov — kredit.",
@@ -172,8 +262,17 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "5530",
+    name: { uz: "Boshqa maxsus schyotlar (Korporativ bank kartasi)", ru: "Прочие спецсчета (Корпоративная банковская карта)" },
+    kind: "active",
+    note: {
+      uz: "Korporativ bank kartasidagi (KBK) pul mablag'lari.",
+      ru: "Денежные средства на корпоративной банковской карте (КБК).",
+    },
+  },
+  {
     code: "5710",
-    name: { uz: "Yo'ldagi pul o'tkazmalari", ru: "Денежные переводы в пути" },
+    name: { uz: "Yo'ldagi pul mablag'lari (o'tkazmalar)", ru: "Денежные переводы в пути" },
     kind: "active",
     note: {
       uz: "Kassadan chiqqan, lekin bank hisobiga hali tushmagan pul (inkassatsiya).",
@@ -181,17 +280,8 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
-    code: "5720",
-    name: { uz: "Maxsus hisobvaraqlardagi pul (plastik/ekvayring)", ru: "Денежные средства на спецсчетах (карты/эквайринг)" },
-    kind: "active",
-    note: {
-      uz: "To'lov terminali orqali tushgan, bank hisobiga o'tkazilishi kutilayotgan mablag'.",
-      ru: "Средства, полученные через терминал и ожидающие зачисления на расчётный счёт.",
-    },
-  },
-  {
     code: "5910",
-    name: { uz: "Aniqlangan kamomad va qimmatliklar yo'qotilishi", ru: "Недостачи и потери ценностей" },
+    name: { uz: "Kamomadlar va qiymatliklarning buzilishidan yo'qotishlar", ru: "Недостачи и потери от порчи ценностей" },
     kind: "active",
     note: {
       uz: "Tranzit (yig'uvchi) aktiv schyot: kamomad avval bu yerga yig'iladi, keyin aybdorga yoki xarajatga yopiladi.",
@@ -200,7 +290,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6010",
-    name: { uz: "Ta'minotchilarga to'lanadigan schyotlar", ru: "Счета к оплате поставщикам" },
+    name: { uz: "Mol yetkazib beruvchilar va pudratchilarga to'lanadigan schyotlar", ru: "Счета к оплате поставщикам и подрядчикам" },
     kind: "passive",
     note: {
       uz: "Kreditorlik qarzi: biz ta'minotchiga qarzdormiz. Qarz oshsa — kredit, to'lansa — debet.",
@@ -209,7 +299,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6310",
-    name: { uz: "Xaridorlardan olingan avanslar", ru: "Авансы, полученные от покупателей" },
+    name: { uz: "Xaridorlar va buyurtmachilardan olingan bo'naklar", ru: "Авансы, полученные от покупателей и заказчиков" },
     kind: "passive",
     note: {
       uz: "Oldindan olingan pul daromad emas, majburiyat: biz tovar/xizmat qarzdormiz.",
@@ -218,7 +308,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6410",
-    name: { uz: "Byudjetga to'lanadigan soliqlar (QQS va b.)", ru: "Налоги к уплате в бюджет (НДС и др.)" },
+    name: { uz: "Byudjetga to'lovlar bo'yicha qarzlar (QQS, foyda solig'i)", ru: "Задолженность по налогам в бюджет (НДС, налог на прибыль)" },
     kind: "passive",
     note: {
       uz: "Soliq majburiyati: hisoblanganda kredit, hisobga olinganda yoki to'langanda debet.",
@@ -227,7 +317,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6420",
-    name: { uz: "Jismoniy shaxslardan ushlangan daromad solig'i", ru: "Удержанный НДФЛ" },
+    name: { uz: "Jismoniy shaxslardan ushlab qolinadigan daromad solig'i", ru: "Удержанный НДФЛ" },
     kind: "passive",
     note: {
       uz: "Xodim daromadidan ushlangan soliq — korxona uni byudjetga o'tkazishi shart.",
@@ -236,7 +326,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6520",
-    name: { uz: "Ijtimoiy sug'urta (ijtimoiy soliq) bo'yicha to'lovlar", ru: "Расчёты по социальному страхованию (соцналог)" },
+    name: { uz: "Ijtimoiy sug'urta (ijtimoiy soliq) bo'yicha to'lovlar", ru: "Расчёты по социальному налогу" },
     kind: "passive",
     note: {
       uz: "Ish beruvchi hisoblaydigan majburiyat, xodim oyligidan ushlanmaydi — xarajatga kiradi.",
@@ -254,7 +344,7 @@ export const ACCOUNTS: Account[] = [
   },
   {
     code: "6710",
-    name: { uz: "Xodimlar bilan mehnat haqi bo'yicha hisob-kitob", ru: "Расчёты с персоналом по оплате труда" },
+    name: { uz: "Xodimlar bilan mehnat haqi bo'yicha hisob-kitoblar", ru: "Расчёты с персоналом по оплате труда" },
     kind: "passive",
     note: {
       uz: "Hisoblangan oylik — kredit (majburiyat oshdi), to'langan yoki ushlangan summa — debet.",
@@ -262,17 +352,35 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
-    code: "6980",
-    name: { uz: "Boshqa majburiyatlar (deponentlangan mehnat haqi)", ru: "Прочие обязательства (депонированная зарплата)" },
+    code: "6720",
+    name: { uz: "Deponentlangan mehnat haqi", ru: "Депонированная заработная плата" },
     kind: "passive",
     note: {
-      uz: "Belgilangan muddatda olinmagan oylik shu yerga o'tkaziladi.",
-      ru: "Не полученная в срок зарплата переносится сюда.",
+      uz: "Belgilangan muddatda olinmagan mehnat haqi majburiyati.",
+      ru: "Не полученная в срок заработная плата.",
+    },
+  },
+  {
+    code: "6810",
+    name: { uz: "Qisqa muddatli bank kreditlari", ru: "Краткосрочные банковские кредиты" },
+    kind: "passive",
+    note: {
+      uz: "Qisqa muddatli kreditlar va zaymlar.",
+      ru: "Краткосрочные банковские кредиты и займы.",
+    },
+  },
+  {
+    code: "6990",
+    name: { uz: "Boshqa majburiyatlar", ru: "Прочие обязательства" },
+    kind: "passive",
+    note: {
+      uz: "Boshqa majburiyatlar va to'lanadigan xizmatlar.",
+      ru: "Прочие обязательства и услуги к оплате.",
     },
   },
   {
     code: "8330",
-    name: { uz: "Ustav kapitali", ru: "Уставный капитал" },
+    name: { uz: "Pay va ulushlar (Ustav kapitali)", ru: "Паи и доли (Уставный капитал)" },
     kind: "passive",
     note: {
       uz: "Egalar oldidagi majburiyat — ta'sis hujjatidagi e'lon qilingan kapital.",
@@ -280,8 +388,26 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "8710",
+    name: { uz: "Taqsimlanmagan foyda", ru: "Нераспределённая прибыль" },
+    kind: "passive",
+    note: {
+      uz: "Korxonaning to'plangan sof foydasi.",
+      ru: "Накопленная чистая прибыль предприятия.",
+    },
+  },
+  {
+    code: "9010",
+    name: { uz: "Mahsulot sotishdan daromadlar", ru: "Доходы от реализации продукции" },
+    kind: "income",
+    note: {
+      uz: "Tayyor mahsulot sotishdan tushgan daromad.",
+      ru: "Выручка от реализации готовой продукции.",
+    },
+  },
+  {
     code: "9020",
-    name: { uz: "Tovar va mahsulot sotishdan daromad", ru: "Доход от реализации товаров и продукции" },
+    name: { uz: "Tovar sotishdan daromadlar", ru: "Доходы от реализации товаров" },
     kind: "income",
     note: {
       uz: "Daromad schyoti passiv xarakterli: daromad kreditga yoziladi.",
@@ -289,12 +415,48 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "9110",
+    name: { uz: "Sotilgan mahsulot tannarxi", ru: "Себестоимость реализованной продукции" },
+    kind: "expense",
+    note: {
+      uz: "Sotilgan tayyor mahsulotning ishlab chiqarish tannarxi.",
+      ru: "Себестоимость реализованной готовой продукции.",
+    },
+  },
+  {
     code: "9120",
-    name: { uz: "Sotilgan tovarlarning tannarxi", ru: "Себестоимость реализованных товаров" },
+    name: { uz: "Sotilgan tovarlar tannarxi", ru: "Себестоимость реализованных товаров" },
     kind: "expense",
     note: {
       uz: "Xarajat schyoti aktiv xarakterli: xarajat debetga yoziladi.",
       ru: "Счёт расходов активный по характеру: расход отражается по дебету.",
+    },
+  },
+  {
+    code: "9210",
+    name: { uz: "Asosiy vositalarning chiqib ketishi", ru: "Выбытие основных средств" },
+    kind: "income",
+    note: {
+      uz: "Asosiy vositalarni sotish/hisobdan chiqarish operatsiyalari.",
+      ru: "Операции по реализации/выбытию основных средств.",
+    },
+  },
+  {
+    code: "9310",
+    name: { uz: "Operativ ijaradan daromadlar", ru: "Доходы от оперативной аренды" },
+    kind: "income",
+    note: {
+      uz: "Mol-mulkni ijaraga berishdan olingan daromadlar.",
+      ru: "Доходы от сдачи имущества в аренду.",
+    },
+  },
+  {
+    code: "9410",
+    name: { uz: "Sotish xarajatlari", ru: "Расходы по реализации" },
+    kind: "expense",
+    note: {
+      uz: "Mahsulot/tovarlarni sotish va reklama bilan bog'liq xarajatlar.",
+      ru: "Расходы на реализацию и рекламу товаров.",
     },
   },
   {

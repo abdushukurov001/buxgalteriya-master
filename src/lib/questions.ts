@@ -13,9 +13,10 @@ export type Question = {
   correct: number;
   explain: L;
   tag: string;
+  isReview?: boolean;
 };
 
-/** Deterministik pseudo-random (mulberry32) — savollar har safar bir xil bo'lishi uchun. */
+/** Pseudo-random generator (mulberry32) */
 function rng(seed: number) {
   let a = seed >>> 0;
   return () => {
@@ -38,7 +39,7 @@ function shuffle<T>(arr: T[], rand: () => number): T[] {
   return a;
 }
 
-const pair = (e: Entry) => `Dt ${e.dt} — Kt ${e.kt}`;
+const pair = (e: { dt: string; kt: string }) => `Dt ${e.dt} — Kt ${e.kt}`;
 
 function kindLabel(kind: AccountKind): { uz: string; ru: string } {
   switch (kind) {
@@ -60,31 +61,55 @@ const TYPE_OPTIONS: AccountKind[] = ["active", "passive", "contra-active", "inco
 function buildForModule(moduleId: number, rand: () => number): Question[] {
   const mod = MODULES.find((m) => m.id === moduleId)!;
   const entries = mod.entries;
-  const all = MODULES.flatMap((m) => m.entries);
+
+  // STRICT REQUIREMENT: Only use modules/entries/accounts taught UP TO current moduleId!
+  const availableModules = MODULES.filter((m) => m.id <= moduleId);
+  const availableEntries = availableModules.flatMap((m) => m.entries);
+  const availableAccounts = Array.from(
+    new Set(availableModules.flatMap((m) => m.accounts))
+  );
+
   const out: Question[] = [];
 
-  entries.forEach((e, i) => {
+  entries.forEach((e) => {
     // 1) Tavsif → to'g'ri Dt-Kt
-    const distract = shuffle(
-      all.filter((x) => x.id !== e.id && !(x.dt === e.dt && x.kt === e.kt)),
-      rand,
-    ).slice(0, 3);
-    const opts = shuffle([e, ...distract], rand);
+    const candidateDistractors = availableEntries.filter(
+      (x) => x.id !== e.id && !(x.dt === e.dt && x.kt === e.kt)
+    );
+
+    const distractOpts: { dt: string; kt: string }[] = shuffle(candidateDistractors, rand).slice(0, 3);
+
+    // If availableEntries does not have 3 distractors yet, synthesize using ONLY studied accounts
+    while (distractOpts.length < 3 && availableAccounts.length >= 2) {
+      const dtAcc = availableAccounts[Math.floor(rand() * availableAccounts.length)]!;
+      let ktAcc = availableAccounts[Math.floor(rand() * availableAccounts.length)]!;
+      if (ktAcc === dtAcc) {
+        ktAcc = availableAccounts[(availableAccounts.indexOf(dtAcc) + 1) % availableAccounts.length]!;
+      }
+      if (
+        !(dtAcc === e.dt && ktAcc === e.kt) &&
+        !distractOpts.some((d) => d.dt === dtAcc && d.kt === ktAcc)
+      ) {
+        distractOpts.push({ dt: dtAcc, kt: ktAcc });
+      }
+    }
+
+    const allOptsForEntry = shuffle([e, ...distractOpts], rand);
     out.push({
       id: `${e.id}-entry`,
       kind: "entry",
       fromModule: moduleId,
       prompt: e.op,
-      options: opts.map((o) => ({ uz: pair(o), ru: pair(o), mono: true })),
-      correct: opts.findIndex((o) => o.id === e.id),
+      options: allOptsForEntry.map((o) => ({ uz: pair(o), ru: pair(o), mono: true })),
+      correct: allOptsForEntry.findIndex((o) => o.dt === e.dt && o.kt === e.kt),
       explain: e.why,
       tag: e.id,
     });
 
     // 2) Dt-Kt → operatsiya
     const dOps = shuffle(
-      all.filter((x) => x.id !== e.id && x.op.uz !== e.op.uz),
-      rand,
+      availableEntries.filter((x) => x.id !== e.id && x.op.uz !== e.op.uz),
+      rand
     ).slice(0, 3);
     const opts2 = shuffle([e, ...dOps], rand);
     out.push({
@@ -100,36 +125,51 @@ function buildForModule(moduleId: number, rand: () => number): Question[] {
     });
 
     // 3) "Xato pravodkani top"
-    if (entries.length >= 2) {
-      const others = shuffle(
-        all.filter((x) => x.id !== e.id),
-        rand,
-      ).slice(0, 3);
-      const fake = (all.find((x) => x.dt !== e.dt && x.kt !== e.kt) ?? all[0]) as Entry;
-      const wrongOpt = {
-        uz: `${e.op.uz} → ${`Dt ${fake.dt} — Kt ${e.kt}`}`,
-        ru: `${e.op.ru} → ${`Dt ${fake.dt} — Kt ${e.kt}`}`,
-      };
-      const goodOpts = others.map((o) => ({
-        uz: `${o.op.uz} → ${pair(o)}`,
-        ru: `${o.op.ru} → ${pair(o)}`,
-      }));
-      const mixed = shuffle([{ ...wrongOpt, bad: true }, ...goodOpts.map((g) => ({ ...g, bad: false }))], rand);
-      out.push({
-        id: `${e.id}-wrong`,
-        kind: "wrong",
-        fromModule: moduleId,
-        prompt: { uz: "Quyidagilardan qaysi biri noto'g'ri yozilgan?", ru: "Какая из записей отражена неверно?" },
-        options: mixed.map((m) => ({ uz: m.uz, ru: m.ru })),
-        correct: mixed.findIndex((m) => m.bad),
-        explain: {
-          uz: `To'g'ri variant: ${pair(e)}. ${e.why.uz}`,
-          ru: `Верный вариант: ${pair(e)}. ${e.why.ru}`,
-        },
-        tag: e.id,
-      });
+    // Distractor valid options must be valid entries strictly from availableEntries
+    const validOthers = shuffle(
+      availableEntries.filter((x) => x.id !== e.id),
+      rand
+    ).slice(0, 3);
+
+    // Bad/wrong option MUST use studied accounts! E.g. inverted Dt/Kt or invalid pair of studied accounts
+    let fakeDt = e.kt;
+    let fakeKt = e.dt;
+    if (fakeDt === e.dt && fakeKt === e.kt) {
+      fakeDt = availableAccounts.find((a) => a !== e.dt) || e.dt;
+      fakeKt = e.dt;
     }
-    void i;
+    const fakePair = `Dt ${fakeDt} — Kt ${fakeKt}`;
+
+    const wrongOpt = {
+      uz: `${e.op.uz} → ${fakePair}`,
+      ru: `${e.op.ru} → ${fakePair}`,
+    };
+    const goodOpts = validOthers.map((o) => ({
+      uz: `${o.op.uz} → ${pair(o)}`,
+      ru: `${o.op.ru} → ${pair(o)}`,
+    }));
+
+    const mixed = shuffle(
+      [{ ...wrongOpt, bad: true }, ...goodOpts.map((g) => ({ ...g, bad: false }))],
+      rand
+    );
+
+    out.push({
+      id: `${e.id}-wrong`,
+      kind: "wrong",
+      fromModule: moduleId,
+      prompt: {
+        uz: "Quyidagilardan qaysi biri noto'g'ri yozilgan?",
+        ru: "Какая из записей отражена неверно?",
+      },
+      options: mixed.map((m) => ({ uz: m.uz, ru: m.ru })),
+      correct: mixed.findIndex((m) => m.bad),
+      explain: {
+        uz: `To'g'ri variant: ${pair(e)}. ${e.why.uz}`,
+        ru: `Верный вариант: ${pair(e)}. ${e.why.ru}`,
+      },
+      tag: e.id,
+    });
   });
 
   // 4) Schot turi savollari
@@ -157,25 +197,57 @@ function buildForModule(moduleId: number, rand: () => number): Question[] {
 
 export const QUESTIONS_PER_TEST = 30;
 
-/** Modul testi: ~75% joriy modul, ~25% oldingi modullardan takrorlash. */
-export function generateTest(moduleId: number): Question[] {
-  const rand = rng(moduleId * 7919 + 13);
+/** Oldingi mavzulardan aralashtiriladigan savollar soni: 5 dan 10 gacha. */
+const REVIEW_MIN = 5;
+const REVIEW_MAX = 10;
+
+/** Modul testi: joriy mavzu savollari + 5-10 ta oldingi mavzulardan takrorlash (esdan chiqmasligi uchun). */
+export function generateTest(moduleId: number, seed?: number): Question[] {
+  const finalSeed = seed !== undefined ? seed : Math.floor(Math.random() * 1000000);
+  const rand = rng(finalSeed);
   const current = buildForModule(moduleId, rand);
+
+  // prevPool comes strictly from modules < moduleId
   const prevPool = shuffle(
     MODULES.filter((m) => m.id < moduleId).flatMap((m) => buildForModule(m.id, rand)),
-    rand,
+    rand
   );
 
-  const prevCount = moduleId === 1 ? 0 : Math.min(Math.round(QUESTIONS_PER_TEST * 0.25), prevPool.length);
+  // 5-10 ta oldingi savollar aralashtiriladi (agar mavjud bo'lsa)
+  let prevCount: number;
+  if (moduleId === 1 || prevPool.length === 0) {
+    prevCount = 0;
+  } else {
+    // Aim for a random value between REVIEW_MIN and REVIEW_MAX, capped by available pool
+    const target = REVIEW_MIN + Math.floor(rand() * (REVIEW_MAX - REVIEW_MIN + 1));
+    prevCount = Math.min(target, prevPool.length);
+  }
+
   const curCount = QUESTIONS_PER_TEST - prevCount;
 
   const cur: Question[] = [];
   let i = 0;
   while (cur.length < curCount && current.length > 0) {
     const q = current[i % current.length] as Question;
-    cur.push(i < current.length ? q : { ...q, id: `${q.id}-r${Math.floor(i / current.length)}` });
+    // Re-shuffle options if duplicated to vary choice positions
+    const shuffledOpts = shuffle(q.options, rand);
+    const targetOpt = q.options[q.correct];
+    const newCorrect = targetOpt ? shuffledOpts.findIndex((o) => o.uz === targetOpt.uz) : q.correct;
+    cur.push({
+      ...q,
+      id: i < current.length ? q.id : `${q.id}-r${Math.floor(i / current.length)}`,
+      options: shuffledOpts,
+      correct: newCorrect,
+      isReview: false,
+    });
     i++;
   }
 
-  return shuffle([...cur, ...prevPool.slice(0, prevCount)], rand);
+  // Mark review questions so the UI can visually distinguish them
+  const reviewQuestions = prevPool.slice(0, prevCount).map((q) => ({
+    ...q,
+    isReview: true,
+  }));
+
+  return shuffle([...cur, ...reviewQuestions], rand);
 }

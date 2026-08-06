@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, User } from "lucide-react";
+import { BookOpen, Hash, Library, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const nav = [
+    { to: "/accounts", label: t("navAccounts"), icon: Hash, match: (p: string) => p.startsWith("/accounts") },
     { to: "/", label: t("navModules"), icon: BookOpen, match: (p: string) => p === "/" || p.startsWith("/modules") },
     { to: "/reference", label: t("navReference"), icon: Library, match: (p: string) => p.startsWith("/reference") },
     { to: "/profile", label: t("navProfile"), icon: User, match: (p: string) => p.startsWith("/profile") },
@@ -56,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-4 pb-28">{children}</main>
 
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto grid max-w-3xl grid-cols-3">
+        <div className="mx-auto grid max-w-3xl grid-cols-4">
           {nav.map((item) => {
             const active = item.match(pathname);
             return (
@@ -65,7 +66,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={item.to}
                 className={cn(
                   "flex flex-col items-center gap-1 py-2.5 text-[11px] transition-colors",
-                  active ? "text-emerald-ink" : "text-muted-foreground",
+                  active ? "text-emerald-ink font-semibold" : "text-muted-foreground",
                 )}
               >
                 <item.icon className={cn("h-5 w-5", active && "stroke-[2.4]")} />

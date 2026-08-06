@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ReferenceRouteImport } from './routes/reference'
 import { Route as ModulesIdRouteImport } from './routes/modules.$id'
@@ -17,6 +18,11 @@ import { Route as ModulesIdRouteImport } from './routes/modules.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -37,12 +43,14 @@ const ModulesIdRoute = ModulesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/modules/$id': typeof ModulesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/modules/$id': typeof ModulesIdRoute
@@ -50,20 +58,23 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/modules/$id': typeof ModulesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/reference' | '/modules/$id'
+  fullPaths: '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/reference' | '/modules/$id'
-  id: '__root__' | '/' | '/profile' | '/reference' | '/modules/$id'
+  to: '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
+  id:
+    '__root__' | '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRoute
   ProfileRoute: typeof ProfileRoute
   ReferenceRoute: typeof ReferenceRoute
   ModulesIdRoute: typeof ModulesIdRoute
@@ -76,6 +87,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -104,6 +122,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRoute,
   ProfileRoute: ProfileRoute,
   ReferenceRoute: ReferenceRoute,
   ModulesIdRoute: ModulesIdRoute,
@@ -111,3 +130,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

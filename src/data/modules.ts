@@ -25,7 +25,7 @@ export const MODULES: Module[] = [
       uz: "Korxona tashkil etilishi, ustav kapitalining e'lon qilinishi va ta'sischilar ulushining kiritilishi.",
       ru: "Создание предприятия, объявление уставного капитала и внесение вкладов учредителями.",
     },
-    accounts: ["4610", "8330", "5110", "0820", "1080", "1010", "01XX"],
+    accounts: ["4610", "8330", "5110", "0820", "1080", "1010", "0130"],
     entries: [
       {
         id: "m1e1",
@@ -64,8 +64,8 @@ export const MODULES: Module[] = [
           ru: "В качестве вклада учредителя внесён долгосрочный актив (оборудование, транспорт) — принят как капвложение.",
         },
         why: {
-          uz: "0820 aktiv — aktivni olishga sarflangan qiymat to'plandi → debet. 4610 aktiv kamaydi (qarz yopildi) → kredit. Aktiv 01XX ga faqat foydalanishga tayyor bo'lganda o'tkaziladi.",
-          ru: "0820 активный — накоплена стоимость приобретения актива → дебет. 4610 актив уменьшился (долг погашен) → кредит. На 01XX переносится только при готовности к использованию.",
+          uz: "0820 aktiv — aktivni olishga sarflangan qiymat to'plandi → debet. 4610 aktiv kamaydi (qarz yopildi) → kredit. Aktiv 0130 ga faqat foydalanishga tayyor bo'lganda o'tkaziladi.",
+          ru: "0820 активный — накоплена стоимость приобретения актива → дебет. 4610 актив уменьшился (долг погашен) → кредит. На 0130 переносится только при готовности к использованию.",
         },
         ref: "bhms5",
       },
@@ -106,75 +106,75 @@ export const MODULES: Module[] = [
       uz: "Uzoq muddatli aktivlarni olish, qurish, ishga tushirish, eskirish va chiqarish hisobi.",
       ru: "Учёт приобретения, строительства, ввода, износа и выбытия долгосрочных активов.",
     },
-    accounts: ["01XX", "02XX", "0710", "0720", "0820", "6010", "9420", "2010"],
+    accounts: ["0130", "0230", "0710", "0720", "0820", "6010", "9420", "2010"],
     entries: [
       {
         id: "m2e1",
-        dt: "01XX",
+        dt: "0130",
         kt: "0710",
         op: {
           uz: "Qurilishi tugagan obyekt asosiy vositalar tarkibiga qabul qilindi (ishga tushirildi).",
           ru: "Завершённый строительством объект принят в состав основных средств (введён в эксплуатацию).",
         },
         why: {
-          uz: "Ikkalasi ham aktiv schyot: 01XX oshdi → debet, 0710 dagi to'plangan xarajat yopildi, ya'ni kamaydi → kredit. Bu qiymatning bir aktivdan boshqasiga ko'chishi.",
-          ru: "Оба счёта активные: 01XX вырос → дебет, накопленные затраты на 0710 списаны → кредит. Это перенос стоимости из одного актива в другой.",
+          uz: "Ikkalasi ham aktiv schyot: 0130 oshdi → debet, 0710 dagi to'plangan xarajat yopildi, ya'ni kamaydi → kredit. Bu qiymatning bir aktivdan boshqasiga ko'chishi.",
+          ru: "Оба счёта активные: 0130 вырос → дебет, накопленные затраты на 0710 списаны → кредит. Это перенос стоимости из одного актива в другой.",
         },
         ref: "bhms5",
       },
       {
         id: "m2e2",
-        dt: "01XX",
+        dt: "0130",
         kt: "0720",
         op: {
           uz: "O'rnatilgan uskuna asosiy vositalar tarkibiga o'tkazildi.",
           ru: "Смонтированное оборудование переведено в состав основных средств.",
         },
         why: {
-          uz: "01XX aktiv oshdi → debet; 0720 aktiv (o'rnatilishi kutilayotgan uskuna) kamaydi → kredit.",
-          ru: "01XX актив вырос → дебет; 0720 (оборудование к установке) уменьшился → кредит.",
+          uz: "0130 aktiv oshdi → debet; 0720 aktiv (o'rnatilishi kutilayotgan uskuna) kamaydi → kredit.",
+          ru: "0130 актив вырос → дебет; 0720 (оборудование к установке) уменьшился → кредит.",
         },
         ref: "bhms5",
       },
       {
         id: "m2e3",
-        dt: "01XX",
+        dt: "0130",
         kt: "0820",
         op: {
           uz: "Sotib olingan asosiy vosita barcha xarajatlari bilan foydalanishga qabul qilindi.",
           ru: "Приобретённое основное средство со всеми затратами принято к эксплуатации.",
         },
         why: {
-          uz: "0820 da to'plangan boshlang'ich qiymat (narx + tashish + o'rnatish) 01XX ga o'tadi: bir aktiv oshdi (debet), boshqasi yopildi (kredit).",
-          ru: "Накопленная на 0820 первоначальная стоимость (цена + доставка + монтаж) переносится на 01XX: один актив вырос (дебет), другой закрыт (кредит).",
+          uz: "0820 da to'plangan boshlang'ich qiymat (narx + tashish + o'rnatish) 0130 ga o'tadi: bir aktiv oshdi (debet), boshqasi yopildi (kredit).",
+          ru: "Накопленная на 0820 первоначальная стоимость (цена + доставка + монтаж) переносится на 0130: один актив вырос (дебет), другой закрыт (кредит).",
         },
         ref: "bhms5",
       },
       {
         id: "m2e4",
         dt: "9420",
-        kt: "02XX",
+        kt: "0230",
         op: {
           uz: "Ma'muriy maqsadda ishlatiladigan asosiy vositalar bo'yicha oylik eskirish hisoblandi.",
           ru: "Начислен месячный износ по основным средствам административного назначения.",
         },
         why: {
-          uz: "9420 xarajat (aktiv xarakterli) — xarajat oshdi → debet. 02XX kontr-aktiv (passiv xarakterli) — eskirish to'plandi → kredit. 01XX ning o'zi o'zgarmaydi.",
-          ru: "9420 расход (активный по характеру) вырос → дебет. 02XX контр-активный — износ накоплен → кредит. Сам 01XX не меняется.",
+          uz: "9420 xarajat (aktiv xarakterli) — xarajat oshdi → debet. 0230 kontr-aktiv (passiv xarakterli) — eskirish to'plandi → kredit. 0130 ning o'zi o'zgarmaydi.",
+          ru: "9420 расход (активный по характеру) вырос → дебет. 0230 контр-активный — износ накоплен → кредит. Сам 0130 не меняется.",
         },
         ref: "bhms5",
       },
       {
         id: "m2e5",
         dt: "2010",
-        kt: "02XX",
+        kt: "0230",
         op: {
           uz: "Ishlab chiqarish uskunalari bo'yicha eskirish hisoblanib, mahsulot tannarxiga qo'shildi.",
           ru: "Начислен износ производственного оборудования с включением в себестоимость продукции.",
         },
         why: {
-          uz: "2010 aktiv (kalkulyatsiya) — tannarx xarajati oshdi → debet. 02XX kontr-aktiv oshdi → kredit.",
-          ru: "2010 активный (калькуляционный) — затраты выросли → дебет. 02XX контр-активный вырос → кредит.",
+          uz: "2010 aktiv (kalkulyatsiya) — tannarx xarajati oshdi → debet. 0230 kontr-aktiv oshdi → kredit.",
+          ru: "2010 активный (калькуляционный) — затраты выросли → дебет. 0230 контр-активный вырос → кредит.",
         },
         ref: "bhms4",
       },

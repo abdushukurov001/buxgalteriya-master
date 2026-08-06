@@ -10,9 +10,16 @@ export const dict = {
     uz: "Buxgalteriyani yodlab emas, tushunib o'rganing",
     ru: "Учите бухгалтерию с пониманием, а не зубрёжкой",
   },
+  navAccounts: { uz: "Schotlar", ru: "Счета" },
   navModules: { uz: "Mavzular", ru: "Темы" },
   navReference: { uz: "Ma'lumotnoma", ru: "Справочник" },
   navProfile: { uz: "Profil", ru: "Профиль" },
+  chartOfAccounts: { uz: "Schotlar rejasi", ru: "План счетов" },
+  chartSub: {
+    uz: "O'zbekiston Respublikasi buxgalteriya hisobi schyotlar rejasi (21-son BHMS)",
+    ru: "План счетов бухгалтерского учета Республики Узбекистан (НСБУ № 21)",
+  },
+  allTypes: { uz: "Barchasi", ru: "Все" },
   read: { uz: "O'qish", ru: "Изучение" },
   test: { uz: "Test", ru: "Тест" },
   accounts: { uz: "Schotlar", ru: "Счета" },
@@ -65,6 +72,11 @@ export const dict = {
   entriesCount: { uz: "pravodka", ru: "проводок" },
   accountsCount: { uz: "schot", ru: "счётов" },
   bestScore: { uz: "Eng yaxshi natija", ru: "Лучший результат" },
+  review: { uz: "Takrorlash", ru: "Повторение" },
+  reviewQuestions: {
+    uz: "ta savol oldingi mavzulardan (takrorlash)",
+    ru: "вопр. из предыдущих тем (повторение)",
+  },
 } as const;
 
 export type DictKey = keyof typeof dict;

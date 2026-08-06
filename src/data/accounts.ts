@@ -10,21 +10,21 @@ export type Account = {
 /** O'zbekiston Respublikasi buxgalteriya hisobi schyotlar rejasi (asosiy schyotlar). */
 export const ACCOUNTS: Account[] = [
   {
-    code: "01XX",
-    name: { uz: "Asosiy vositalar", ru: "Основные средства" },
+    code: "0130",
+    name: { uz: "Asosiy vositalar (mashinalar va uskunalar)", ru: "Основные средства (машины и оборудование)" },
     kind: "active",
     note: {
-      uz: "Bino, uskuna, transport kabi uzoq muddatli aktivlar boshlang'ich qiymatda yuritiladi. Kirim — debet, chiqim — kredit.",
-      ru: "Здания, оборудование, транспорт учитываются по первоначальной стоимости. Поступление — дебет, выбытие — кредит.",
+      uz: "Bino, uskuna, transport kabi uzoq muddatli aktivlar boshlang'ich qiymatda yuritiladi (0110 — binolar, 0120 — inshootlar, 0130 — mashinalar, 0140 — transport, 0150 — mebel va jihozlar, 0160 — ko'p yillik daraxtlar, 0170 — ishchi va mahsuldor hayvonlar, 0190 — boshqa AV). Kirim — debet, chiqim — kredit.",
+      ru: "Здания, оборудование, транспорт учитываются по первоначальной стоимости (0110 — здания, 0120 — сооружения, 0130 — машины, 0140 — транспорт, 0150 — мебель, 0160 — многолетние насаждения, 0170 — рабочий скот, 0190 — прочие ОС). Поступление — дебет, выбытие — кредит.",
     },
   },
   {
-    code: "02XX",
-    name: { uz: "Asosiy vositalar eskirishi (amortizatsiya)", ru: "Износ основных средств" },
+    code: "0230",
+    name: { uz: "Asosiy vositalar eskirishi (amortizatsiya)", ru: "Износ основных средств (амортизация)" },
     kind: "contra-active",
     note: {
-      uz: "Kontr-aktiv (passiv xarakterli) schyot: eskirish hisoblanganda kreditlanadi, aktiv chiqib ketganda debetlanadi.",
-      ru: "Контр-активный (пассивный по характеру) счёт: начисление износа — кредит, списание при выбытии — дебет.",
+      uz: "Kontr-aktiv (passiv xarakterli) schyot (0210 — binolar eskirishi, 0220 — inshootlar, 0230 — mashinalar, 0240 — transport, 0250 — mebel, 0290 — boshqa AV eskirishi): eskirish hisoblanganda kreditlanadi, aktiv chiqib ketganda debetlanadi.",
+      ru: "Контр-активный (пассивный по характеру) счёт (0210 — износ зданий, 0220 — сооружений, 0230 — машин, 0240 — транспорта, 0250 — мебели, 0290 — прочих ОС): начисление износа — кредит, списание при выбытии — дебет.",
     },
   },
   {
@@ -32,8 +32,8 @@ export const ACCOUNTS: Account[] = [
     name: { uz: "Tugallanmagan qurilish", ru: "Незавершённое строительство" },
     kind: "active",
     note: {
-      uz: "Qurilish jarayonidagi obyektga to'plangan xarajatlar. Obyekt ishga tushganda 01XX ga o'tkaziladi.",
-      ru: "Накопленные затраты по строящемуся объекту. При вводе объект переносится на 01XX.",
+      uz: "Qurilish jarayonidagi obyektga to'plangan xarajatlar. Obyekt ishga tushganda 0130 ga o'tkaziladi.",
+      ru: "Накопленные затраты по строящемуся объекту. При вводе объект переносится на 0130.",
     },
   },
   {
@@ -41,8 +41,8 @@ export const ACCOUNTS: Account[] = [
     name: { uz: "O'rnatiladigan uskunalar", ru: "Оборудование к установке" },
     kind: "active",
     note: {
-      uz: "Sotib olingan, lekin hali o'rnatilmagan uskunalar. O'rnatilgach 01XX ga o'tadi.",
-      ru: "Приобретённое, но ещё не смонтированное оборудование. После монтажа переходит на 01XX.",
+      uz: "Sotib olingan, lekin hali o'rnatilmagan uskunalar. O'rnatilgach 0130 ga o'tadi.",
+      ru: "Приобретённое, но ещё не смонтированное оборудование. После монтажа переходит на 0130.",
     },
   },
   {

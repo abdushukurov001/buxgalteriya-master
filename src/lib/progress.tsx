@@ -22,6 +22,23 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function loadFromStorage(): ProgressState {
+  if (typeof window === "undefined") return EMPTY;
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    if (!raw) return EMPTY;
+    const parsed = JSON.parse(raw) as ProgressState;
+    return {
+      results: parsed.results || {},
+      mistakes: parsed.mistakes || {},
+      lastActiveDay: parsed.lastActiveDay || null,
+      streak: parsed.streak || 0,
+    };
+  } catch {
+    return EMPTY;
+  }
+}
+
 function bumpStreak(state: ProgressState): ProgressState {
   const d = today();
   if (state.lastActiveDay === d) return state;
@@ -45,24 +62,18 @@ type Ctx = {
 const ProgressContext = createContext<Ctx | null>(null);
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<ProgressState>(EMPTY);
+  const [state, setState] = useState<ProgressState>(() => loadFromStorage());
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(KEY);
-      if (raw) setState({ ...EMPTY, ...(JSON.parse(raw) as ProgressState) });
-    } catch {
-      /* ignore */
-    }
-  }, []);
+    // Sync state if localStorage is changed externally or deleted in dev tools / another tab
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === KEY || e.key === null) {
+        setState(loadFromStorage());
+      }
+    };
 
-  const persist = useCallback((next: ProgressState) => {
-    setState(next);
-    try {
-      window.localStorage.setItem(KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const saveResult = useCallback(
@@ -96,6 +107,15 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const reset = useCallback(() => {
+    try {
+      window.localStorage.removeItem(KEY);
+    } catch {
+      /* ignore */
+    }
+    setState(EMPTY);
+  }, []);
+
   const isUnlocked = useCallback(
     (moduleId: number) => moduleId === 1 || Boolean(state.results[moduleId - 1]?.passed),
     [state.results],
@@ -110,7 +130,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     state,
     isUnlocked,
     saveResult,
-    reset: () => persist(EMPTY),
+    reset,
     overallPercent,
     passMark: PASS_MARK,
   };

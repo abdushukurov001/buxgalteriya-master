@@ -193,3 +193,13 @@
     var(--paper-line) 32px
   );
 }
+
+/* Hide any Lovable badges, watermarks, or external ads */
+#lovable-badge,
+[data-lovable],
+.lovable-badge,
+a[href*="lovable.dev"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

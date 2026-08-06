@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Check, X } from "lucide-react";
+import { ArrowLeft, Check, RotateCcw, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { EntryCard } from "@/components/EntryCard";
 import { ACCOUNT_MAP } from "@/data/accounts";
@@ -122,7 +122,9 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
   const { t, tr, lang } = useLang();
   const { saveResult, passMark } = useProgress();
   const navigate = useNavigate();
-  const questions = useMemo(() => generateTest(moduleId), [moduleId]);
+
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1000000));
+  const questions = useMemo(() => generateTest(moduleId, seed), [moduleId, seed]);
 
   const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
@@ -130,6 +132,16 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
   const [wrong, setWrong] = useState<{ q: Question; chosen: number }[]>([]);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+
+  const startTest = () => {
+    setSeed(Math.floor(Math.random() * 1000000));
+    setIndex(0);
+    setPicked(null);
+    setWrong([]);
+    setScore(0);
+    setFinished(false);
+    setStarted(true);
+  };
 
   const q = questions[index];
 
@@ -146,6 +158,8 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
     }
   };
 
+  const reviewCount = useMemo(() => questions.filter((q) => q.isReview).length, [questions]);
+
   if (!started) {
     return (
       <div className="paper-card space-y-3 p-5 text-center">
@@ -153,8 +167,14 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
         <p className="text-sm text-muted-foreground">
           {t("question")} · {passMark}% = {t("done")}
         </p>
+        {reviewCount > 0 && (
+          <p className="flex items-center justify-center gap-1.5 text-xs text-amber-600">
+            <RotateCcw className="h-3.5 w-3.5" />
+            {reviewCount} {t("reviewQuestions")}
+          </p>
+        )}
         <button
-          onClick={() => setStarted(true)}
+          onClick={startTest}
           className="w-full rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
         >
           {t("startTest")}
@@ -192,10 +212,16 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
         )}
 
         <div className="grid gap-2">
+          <button
+            onClick={startTest}
+            className="rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
+          >
+            {t("retryTest")}
+          </button>
           {!passed && (
             <button
               onClick={onReview}
-              className="rounded-md bg-primary px-4 py-3 text-sm font-medium text-primary-foreground"
+              className="rounded-md border border-border px-4 py-3 text-sm font-medium"
             >
               {t("reviewMaterial")}
             </button>
@@ -251,7 +277,15 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
       </div>
 
       <div className="paper-card space-y-3 p-4">
-        <p className="text-[11px] tracking-wide text-gold uppercase">{promptTitle(q)}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-[11px] tracking-wide text-gold uppercase">{promptTitle(q)}</p>
+          {q.isReview && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+              <RotateCcw className="h-2.5 w-2.5" />
+              {t("review")}
+            </span>
+          )}
+        </div>
         <p className={cn("text-sm leading-relaxed", q.kind === "op" && "font-mono text-base")}>
           {tr(q.prompt)}
         </p>

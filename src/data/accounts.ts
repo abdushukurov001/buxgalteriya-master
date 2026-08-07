@@ -325,6 +325,15 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "6510",
+    name: { uz: "Sug'urtalar bo'yicha qarzlar (FSS / Dekret)", ru: "Задолженность по страхованию (ФСС / декретные)" },
+    kind: "passive",
+    note: {
+      uz: "FSS hisobidan homiladorlik va tug'ish (dekret) nafaqasi hamda sug'urta to'lovlari.",
+      ru: "Расчёты по страхованию и пособиям по беременности и родам.",
+    },
+  },
+  {
     code: "6520",
     name: { uz: "Ijtimoiy sug'urta (ijtimoiy soliq) bo'yicha to'lovlar", ru: "Расчёты по социальному налогу" },
     kind: "passive",
@@ -367,6 +376,15 @@ export const ACCOUNTS: Account[] = [
     note: {
       uz: "Qisqa muddatli kreditlar va zaymlar.",
       ru: "Краткосрочные банковские кредиты и займы.",
+    },
+  },
+  {
+    code: "6980",
+    name: { uz: "Boshqa majburiyatlar (kasaba uyushmasi / ijro varaqalari)", ru: "Прочие обязательства (профсоюз / исполнительные листы)" },
+    kind: "passive",
+    note: {
+      uz: "Ish haqidan ushlangan kasaba uyushmasi badallari va boshqa ijro varaqalari majburiyatlari.",
+      ru: "Профсоюзные взносы и удержания по исполнительным листам.",
     },
   },
   {

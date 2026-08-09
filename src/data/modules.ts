@@ -750,7 +750,7 @@ export const MODULES: Module[] = [
       uz: "Asosiy vositalar va ularga o'rnatiladigan uskunalarni sotib olish, pudrat xizmati, foydalanishga topshirish hamda eskirish hisoblash.",
       ru: "Покупка основных средств, оборудования, услуг подрядчиков, ввод в эксплуатацию и начисление амортизации.",
     },
-    accounts: ["0820", "6010", "0710", "0720", "4410", "01xx", "9420", "02xx", "2010", "1510", "1010", "2910", "9210", "02xx"],
+    accounts: ["0820", "6010", "0710", "0720", "4410", "01xx", "9420", "02xx", "2010", "1510", "1010", "2910", "9210"],
     entries: [
       {
         id: "m8e1",

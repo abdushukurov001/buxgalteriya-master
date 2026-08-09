@@ -10,6 +10,42 @@ export type Account = {
 /** O'zbekiston Respublikasi buxgalteriya hisobi schyotlar rejasi (21-son BHMS bo'yicha rasmiy schyotlar). */
 export const ACCOUNTS: Account[] = [
   {
+    code: "01xx",
+    name: { uz: "Asosiy vositalar (0110-0190 guruhi)", ru: "Основные средства (группа 0110-0190)" },
+    kind: "active",
+    note: {
+      uz: "Asosiy vositalar guruhi: 0110 — yer, 0120 — binolar, 0130 — mashina va uskunalar, 0160 — transport. Kirim — debet, chiqim — kredit.",
+      ru: "Группа основных средств: 0110 — земля, 0120 — здания, 0130 — машины и оборудование, 0160 — транспорт. Поступление — дебет, выбытие — кредит.",
+    },
+  },
+  {
+    code: "02xx",
+    name: { uz: "Asosiy vositalar eskirishi (0210-0290 guruhi)", ru: "Износ основных средств (группа 0210-0290)" },
+    kind: "contra-active",
+    note: {
+      uz: "Kontr-aktiv guruh: eskirish hisoblanganda kreditlanadi, aktiv chiqib ketganda debetlanadi.",
+      ru: "Контр-активная группа: начисление износа — кредит, списание при выбытии — дебет.",
+    },
+  },
+  {
+    code: "04xx",
+    name: { uz: "Nomoddiy aktivlar (0410-0490 guruhi)", ru: "Нематериальные активы (группа 0410-0490)" },
+    kind: "active",
+    note: {
+      uz: "NMA guruhi: patent, litsenziya, dasturiy ta'minot va h.k. Kirim — debet, chiqim — kredit.",
+      ru: "Группа НМА: патенты, лицензии, ПО и т.д. Поступление — дебет, выбытие — кредит.",
+    },
+  },
+  {
+    code: "05xx",
+    name: { uz: "Nomoddiy aktivlar amortizatsiyasi (0510-0590 guruhi)", ru: "Амортизация НМА (группа 0510-0590)" },
+    kind: "contra-active",
+    note: {
+      uz: "Kontr-aktiv guruh: amortizatsiya hisoblanganda kreditlanadi, NMA chiqib ketganda debetlanadi.",
+      ru: "Контр-активная группа: начисление амортизации — кредит, списание при выбытии — дебет.",
+    },
+  },
+  {
     code: "0130",
     name: { uz: "Mashina va asbob-uskunalar (Asosiy vositalar)", ru: "Машины и оборудование (Основные средства)" },
     kind: "active",

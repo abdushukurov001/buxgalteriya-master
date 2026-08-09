@@ -848,8 +848,8 @@ export const MODULES: Module[] = [
         dt: "1510",
         kt: "6010",
         op: {
-          uz: "Kiyim-kechak sotib olindi (4 000 000 so'm) — 1510 tayyorlash schyotiga olindi.",
-          ru: "Приобретена спецодежда (4 000 000 сум) — оприходована на счёт заготовления 1510.",
+          uz: "Kiyim-kechak sotib olindi — 1510 tayyorlash schyotiga olindi.",
+          ru: "Приобретена спецодежда — оприходована на счёт заготовления 1510.",
         },
         why: {
           uz: "Xarid vaqtida aktivning turi hali aniqlanmagan: 1510 (tayyorlash va xarid) oshdi → debet. 6010 (ta'minotchiga qarz) oshdi → kredit.",
@@ -861,8 +861,8 @@ export const MODULES: Module[] = [
         dt: "0820",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak asosiy vosita tarkibiga kiritildi (4 000 000).",
-          ru: "Спецодежда отнесена в состав основных средств (4 000 000).",
+          uz: "Kiyim-kechak asosiy vosita tarkibiga kiritildi.",
+          ru: "Спецодежда отнесена в состав основных средств.",
         },
         why: {
           uz: "Aktiv 1 yildan ortiq xizmat qilsa — kapital qo'yilma: 0820 oshdi → debet. 1510 yopildi → kredit.",
@@ -874,8 +874,8 @@ export const MODULES: Module[] = [
         dt: "1010",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak xom ashyo/materiallar tarkibiga kiritildi (4 000 000).",
-          ru: "Спецодежда отнесена в состав сырья/материалов (4 000 000).",
+          uz: "Kiyim-kechak xom ashyo/materiallar tarkibiga kiritildi.",
+          ru: "Спецодежда отнесена в состав сырья/материалов.",
         },
         why: {
           uz: "Aktiv ishlab chiqarishda sarflansa — material: 1010 oshdi → debet. 1510 yopildi → kredit.",
@@ -887,8 +887,8 @@ export const MODULES: Module[] = [
         dt: "2910",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak tovar sifatida omborga kiritildi (4 000 000).",
-          ru: "Спецодежда оприходована как товар на складе (4 000 000).",
+          uz: "Kiyim-kechak tovar sifatida omborga kiritildi.",
+          ru: "Спецодежда оприходована как товар на складе.",
         },
         why: {
           uz: "Aktiv qayta sotish uchun olingan bo'lsa — tovar: 2910 oshdi → debet. 1510 yopildi → kredit.",
@@ -900,8 +900,8 @@ export const MODULES: Module[] = [
         dt: "9210",
         kt: "01xx",
         op: {
-          uz: "Asosiy vositaning boshlang'ich qiymati chiqib ketishga o'tkazildi (48 000 000).",
-          ru: "Первоначальная стоимость ОС списана на выбытие (48 000 000).",
+          uz: "Asosiy vositaning boshlang'ich qiymati chiqib ketishga o'tkazildi.",
+          ru: "Первоначальная стоимость ОС списана на выбытие.",
         },
         why: {
           uz: "9210 (asosiy vositalar chiqib ketishi) — chiqim qismi debetda to'planadi. 01xx (aktiv) kamaydi → kredit.",
@@ -913,8 +913,8 @@ export const MODULES: Module[] = [
         dt: "02xx",
         kt: "9210",
         op: {
-          uz: "Chiqib ketayotgan asosiy vositaning jamlangan eskirishi hisobdan chiqarildi (48 000 000).",
-          ru: "Списан накопленный износ выбывающего основного средства (48 000 000).",
+          uz: "Chiqib ketayotgan asosiy vositaning jamlangan eskirishi hisobdan chiqarildi.",
+          ru: "Списан накопленный износ выбывающего основного средства.",
         },
         why: {
           uz: "02xx kontr-aktiv: kamayishi debetda. 9210 kreditlanadi — shu bilan qoldiq (balans) qiymat aniqlanadi.",
@@ -940,8 +940,8 @@ export const MODULES: Module[] = [
         dt: "0830",
         kt: "6010",
         op: {
-          uz: "Nomoddiy aktiv sotib olindi (41 200 000).",
-          ru: "Приобретён нематериальный актив (41 200 000).",
+          uz: "Nomoddiy aktiv sotib olindi.",
+          ru: "Приобретён нематериальный актив.",
         },
         why: {
           uz: "0830 (NMA xarid qilish — kapital qo'yilma) oshdi → debet. 6010 (ta'minotchiga qarz) oshdi → kredit.",
@@ -953,8 +953,8 @@ export const MODULES: Module[] = [
         dt: "04xx",
         kt: "0830",
         op: {
-          uz: "Nomoddiy aktiv foydalanishga qabul qilindi (41 200 000).",
-          ru: "Нематериальный актив принят к использованию (41 200 000).",
+          uz: "Nomoddiy aktiv foydalanishga qabul qilindi.",
+          ru: "Нематериальный актив принят к использованию.",
         },
         why: {
           uz: "04xx (NMA boshlang'ich qiymati) oshdi → debet. 0830 dagi to'plangan xarajat yopildi → kredit.",
@@ -966,8 +966,8 @@ export const MODULES: Module[] = [
         dt: "9420",
         kt: "05xx",
         op: {
-          uz: "NMA bo'yicha amortizatsiya ma'muriy xarajatga hisoblandi (1 144 444,44).",
-          ru: "Начислена амортизация НМА в состав административных расходов (1 144 444,44).",
+          uz: "NMA bo'yicha amortizatsiya ma'muriy xarajatga hisoblandi.",
+          ru: "Начислена амортизация НМА в состав административных расходов.",
         },
         why: {
           uz: "9420 (ma'muriy xarajat) oshdi → debet. 05xx (NMA amortizatsiyasi, kontr-aktiv) oshdi → kredit.",
@@ -979,8 +979,8 @@ export const MODULES: Module[] = [
         dt: "2010",
         kt: "05xx",
         op: {
-          uz: "NMA amortizatsiyasi ishlab chiqarish xarajatiga qo'shildi (1 144 444,44).",
-          ru: "Амортизация НМА отнесена на производственные затраты (1 144 444,44).",
+          uz: "NMA amortizatsiyasi ishlab chiqarish xarajatiga qo'shildi.",
+          ru: "Амортизация НМА отнесена на производственные затраты.",
         },
         why: {
           uz: "Agar NMA ishlab chiqarishda ishlatilsa: 2010 (tannarx) oshdi → debet. 05xx (kontr-aktiv) oshdi → kredit.",

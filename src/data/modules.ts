@@ -750,7 +750,7 @@ export const MODULES: Module[] = [
       uz: "Asosiy vositalar va ularga o'rnatiladigan uskunalarni sotib olish, pudrat xizmati, foydalanishga topshirish hamda eskirish hisoblash.",
       ru: "Покупка основных средств, оборудования, услуг подрядчиков, ввод в эксплуатацию и начисление амортизации.",
     },
-    accounts: ["0820", "6010", "0710", "0720", "4410", "0130", "9420", "0230", "2010", "1510", "1010", "2910", "9210", "0210"],
+    accounts: ["0820", "6010", "0710", "0720", "4410", "01xx", "9420", "02xx", "2010", "1510", "1010", "2910", "9210"],
     entries: [
       {
         id: "m8e1",
@@ -806,41 +806,41 @@ export const MODULES: Module[] = [
       },
       {
         id: "m8e5",
-        dt: "0130",
+        dt: "01xx",
         kt: "0820",
         op: {
           uz: "Asosiy vosita foydalanishga topshirildi (0100 schyotlarga o'tdi).",
-          ru: "Основное средство введено в эксплуатацию (переведено на счёт 0130).",
+          ru: "Основное средство введено в эксплуатацию (переведено на счёт 01xx).",
         },
         why: {
-          uz: "0130 (mashina va uskunalar boshlang'ich qiymati) oshdi → debet. 0820 (kapital qo'yilmalar) yopildi → kredit.",
-          ru: "0130 (первоначальная стоимость ОС) выросла → дебет. 0820 (капвложения) закрыты → кредит.",
+          uz: "01xx (mashina va uskunalar boshlang'ich qiymati) oshdi → debet. 0820 (kapital qo'yilmalar) yopildi → kredit.",
+          ru: "01xx (первоначальная стоимость ОС) выросла → дебет. 0820 (капвложения) закрыты → кредит.",
         },
       },
       {
         id: "m8e6",
         dt: "9420",
-        kt: "0230",
+        kt: "02xx",
         op: {
           uz: "Ma'muriy binolar va jihozlar uchun eskirish (amortizatsiya) hisoblandi.",
           ru: "Начислена амортизация административных зданий и оборудования.",
         },
         why: {
-          uz: "9420 (ma'muriy xarajat) oshdi → debet. 0230 (eskirish kontr-aktiv) oshdi → kredit.",
-          ru: "9420 (админ. расход) вырос → дебет. 0230 (износ) вырос → кредит.",
+          uz: "9420 (ma'muriy xarajat) oshdi → debet. 02xx (eskirish kontr-aktiv) oshdi → kredit.",
+          ru: "9420 (админ. расход) вырос → дебет. 02xx (износ) вырос → кредит.",
         },
       },
       {
         id: "m8e7",
         dt: "2010",
-        kt: "0230",
+        kt: "02xx",
         op: {
           uz: "Ishlab chiqarish uskunalari uchun eskirish hisoblandi.",
           ru: "Начислена амортизация производственного оборудования.",
         },
         why: {
-          uz: "2010 (ishlab chiqarish tannarxi) oshdi → debet. 0230 (eskirish kontr-aktiv) oshdi → kredit.",
-          ru: "2010 (себестоимость) выросла → дебет. 0230 (износ) вырос → кредит.",
+          uz: "2010 (ishlab chiqarish tannarxi) oshdi → debet. 02xx (eskirish kontr-aktiv) oshdi → kredit.",
+          ru: "2010 (себестоимость) выросла → дебет. 02xx (износ) вырос → кредит.",
         },
       },
       {
@@ -898,27 +898,27 @@ export const MODULES: Module[] = [
       {
         id: "m8e12",
         dt: "9210",
-        kt: "0130",
+        kt: "01xx",
         op: {
           uz: "Asosiy vositaning boshlang'ich qiymati chiqib ketishga o'tkazildi (48 000 000).",
           ru: "Первоначальная стоимость ОС списана на выбытие (48 000 000).",
         },
         why: {
-          uz: "9210 (asosiy vositalar chiqib ketishi) — chiqim qismi debetda to'planadi. 0130 (aktiv) kamaydi → kredit.",
-          ru: "9210 (выбытие ОС) — списываемая стоимость собирается по дебету. 0130 (актив) уменьшился → кредит.",
+          uz: "9210 (asosiy vositalar chiqib ketishi) — chiqim qismi debetda to'planadi. 01xx (aktiv) kamaydi → kredit.",
+          ru: "9210 (выбытие ОС) — списываемая стоимость собирается по дебету. 01xx (актив) уменьшился → кредит.",
         },
       },
       {
         id: "m8e13",
-        dt: "0230",
+        dt: "02xx",
         kt: "9210",
         op: {
           uz: "Chiqib ketayotgan asosiy vositaning jamlangan eskirishi hisobdan chiqarildi (48 000 000).",
           ru: "Списан накопленный износ выбывающего основного средства (48 000 000).",
         },
         why: {
-          uz: "0230 kontr-aktiv: kamayishi debetda. 9210 kreditlanadi — shu bilan qoldiq (balans) qiymat aniqlanadi.",
-          ru: "0230 контр-активный: уменьшение по дебету. 9210 кредитуется — так определяется остаточная стоимость.",
+          uz: "02xx kontr-aktiv: kamayishi debetda. 9210 kreditlanadi — shu bilan qoldiq (balans) qiymat aniqlanadi.",
+          ru: "02xx контр-активный: уменьшение по дебету. 9210 кредитуется — так определяется остаточная стоимость.",
         },
       },
     ],
@@ -933,7 +933,7 @@ export const MODULES: Module[] = [
       uz: "Litsenziya, dasturiy ta'minot va boshqa nomoddiy aktivlarni sotib olish, 0830 orqali 04xx ga o'tkazish va 05xx bo'yicha amortizatsiya hisoblash.",
       ru: "Покупка лицензий, ПО и прочих НМА, перевод через 0830 на 04xx и начисление амортизации по 05xx.",
     },
-    accounts: ["0830", "0410", "0510", "6010", "9420", "2010"],
+    accounts: ["0830", "04xx", "05xx", "6010", "9420", "2010"],
     entries: [
       {
         id: "m9e1",
@@ -950,41 +950,41 @@ export const MODULES: Module[] = [
       },
       {
         id: "m9e2",
-        dt: "0410",
+        dt: "04xx",
         kt: "0830",
         op: {
           uz: "Nomoddiy aktiv foydalanishga qabul qilindi (41 200 000).",
           ru: "Нематериальный актив принят к использованию (41 200 000).",
         },
         why: {
-          uz: "0410 (NMA boshlang'ich qiymati) oshdi → debet. 0830 dagi to'plangan xarajat yopildi → kredit.",
-          ru: "0410 (первоначальная стоимость НМА) выросла → дебет. Накопленные затраты 0830 закрыты → кредит.",
+          uz: "04xx (NMA boshlang'ich qiymati) oshdi → debet. 0830 dagi to'plangan xarajat yopildi → kredit.",
+          ru: "04xx (первоначальная стоимость НМА) выросла → дебет. Накопленные затраты 0830 закрыты → кредит.",
         },
       },
       {
         id: "m9e3",
         dt: "9420",
-        kt: "0510",
+        kt: "05xx",
         op: {
           uz: "NMA bo'yicha amortizatsiya ma'muriy xarajatga hisoblandi (1 144 444,44).",
           ru: "Начислена амортизация НМА в состав административных расходов (1 144 444,44).",
         },
         why: {
-          uz: "9420 (ma'muriy xarajat) oshdi → debet. 0510 (NMA amortizatsiyasi, kontr-aktiv) oshdi → kredit.",
-          ru: "9420 (админ. расход) вырос → дебет. 0510 (амортизация НМА, контр-актив) выросла → кредит.",
+          uz: "9420 (ma'muriy xarajat) oshdi → debet. 05xx (NMA amortizatsiyasi, kontr-aktiv) oshdi → kredit.",
+          ru: "9420 (админ. расход) вырос → дебет. 05xx (амортизация НМА, контр-актив) выросла → кредит.",
         },
       },
       {
         id: "m9e4",
         dt: "2010",
-        kt: "0510",
+        kt: "05xx",
         op: {
           uz: "NMA amortizatsiyasi ishlab chiqarish xarajatiga qo'shildi (1 144 444,44).",
           ru: "Амортизация НМА отнесена на производственные затраты (1 144 444,44).",
         },
         why: {
-          uz: "Agar NMA ishlab chiqarishda ishlatilsa: 2010 (tannarx) oshdi → debet. 0510 (kontr-aktiv) oshdi → kredit.",
-          ru: "Если НМА используется в производстве: 2010 (себестоимость) выросла → дебет. 0510 (контр-актив) выросла → кредит.",
+          uz: "Agar NMA ishlab chiqarishda ishlatilsa: 2010 (tannarx) oshdi → debet. 05xx (kontr-aktiv) oshdi → kredit.",
+          ru: "Если НМА используется в производстве: 2010 (себестоимость) выросла → дебет. 05xx (контр-актив) выросла → кредит.",
         },
       },
     ],

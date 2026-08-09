@@ -750,7 +750,7 @@ export const MODULES: Module[] = [
       uz: "Asosiy vositalar va ularga o'rnatiladigan uskunalarni sotib olish, pudrat xizmati, foydalanishga topshirish hamda eskirish hisoblash.",
       ru: "Покупка основных средств, оборудования, услуг подрядчиков, ввод в эксплуатацию и начисление амортизации.",
     },
-    accounts: ["0820", "6010", "0710", "0720", "4410", "0130", "9420", "0230", "2010"],
+    accounts: ["0820", "6010", "0710", "0720", "4410", "0130", "9420", "0230", "2010", "1510", "1010", "2910", "9210", "0210"],
     entries: [
       {
         id: "m8e1",
@@ -846,6 +846,7 @@ export const MODULES: Module[] = [
     ],
   },
 ];
+
 
 export const ALL_ENTRIES = MODULES.flatMap((m) => m.entries.map((e) => ({ ...e, moduleId: m.id })));
 export const TOTAL_MODULES = MODULES.length;

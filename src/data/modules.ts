@@ -849,7 +849,7 @@ export const MODULES: Module[] = [
         kt: "6010",
         op: {
           uz: "Kiyim-kechak sotib olindi — 1510 tayyorlash schyotiga olindi.",
-          ru: "Приобретена спецодежда (4 000 000 сум) — оприходована на счёт заготовления 1510.",
+          ru: "Приобретена спецодежда — оприходована на счёт заготовления 1510.",
         },
         why: {
           uz: "Xarid vaqtida aktivning turi hali aniqlanmagan: 1510 (tayyorlash va xarid) oshdi → debet. 6010 (ta'minotchiga qarz) oshdi → kredit.",

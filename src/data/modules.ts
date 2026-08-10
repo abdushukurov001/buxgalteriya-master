@@ -35,7 +35,7 @@ export const MODULES: Module[] = [
         dt: "4610",
         kt: "8330",
         op: {
-          uz: "Ustav kapitalini shakllantirish bo'yicha muassislar qarzdorligi.",
+          uz: "Ustav kapitalini shakllantirish bo'yicha tasischilar qarzdorligi.",
           ru: "Задолженность учредителей по формированию уставного капитала.",
         },
         why: {
@@ -48,7 +48,7 @@ export const MODULES: Module[] = [
         dt: "5110",
         kt: "4610",
         op: {
-          uz: "Muassis ustav kapitaliga bank orqali pul o'tkazdi.",
+          uz: "Tasischi ustav kapitaliga bank orqali pul o'tkazdi.",
           ru: "Учредитель внёс деньги в уставный капитал через банк.",
         },
         why: {
@@ -61,7 +61,7 @@ export const MODULES: Module[] = [
         dt: "0820",
         kt: "4610",
         op: {
-          uz: "Muassis ustav kapitaliga asosiy vosita (uskuna/mashina) berdi.",
+          uz: "Tasischi ustav kapitaliga asosiy vosita (uskuna/mashina) berdi.",
           ru: "Учредитель внёс в уставный капитал основное средство (оборудование/машину).",
         },
         why: {
@@ -74,7 +74,7 @@ export const MODULES: Module[] = [
         dt: "1080",
         kt: "4610",
         op: {
-          uz: "Muassis ustav kapitaliga qurilish materiallari berdi.",
+          uz: "Tasischi ustav kapitaliga qurilish materiallari berdi.",
           ru: "Учредитель внёс в уставный капитал строительные материалы (инвентарь).",
         },
         why: {
@@ -87,7 +87,7 @@ export const MODULES: Module[] = [
         dt: "1010",
         kt: "4610",
         op: {
-          uz: "Muassis ustav kapitaliga xomashyo va materiallar kiritdi.",
+          uz: "Tasischi ustav kapitaliga xomashyo va materiallar kiritdi.",
           ru: "Учредитель внёс в уставный капитал сырьё и материалы.",
         },
         why: {
@@ -848,8 +848,8 @@ export const MODULES: Module[] = [
         dt: "1510",
         kt: "6010",
         op: {
-          uz: "Kiyim-kechak sotib olindi — 1510 tayyorlash schyotiga olindi.",
-          ru: "Приобретена спецодежда — оприходована на счёт заготовления 1510.",
+          uz: "Qo'shimcha xarajat sotib olindi — 1510 tayyorlash schyotiga olindi.",
+          ru: "Приобретены дополнительные расходы — оприходована на счёт заготовления 1510.",
         },
         why: {
           uz: "Xarid vaqtida aktivning turi hali aniqlanmagan: 1510 (tayyorlash va xarid) oshdi → debet. 6010 (ta'minotchiga qarz) oshdi → kredit.",
@@ -861,8 +861,8 @@ export const MODULES: Module[] = [
         dt: "0820",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak asosiy vosita tarkibiga kiritildi.",
-          ru: "Спецодежда отнесена в состав основных средств.",
+          uz: "Qo'shimcha xarajat asosiy vosita tarkibiga kiritildi.",
+          ru: "Дополнительные расходы отнесены в состав основных средств.",
         },
         why: {
           uz: "Aktiv 1 yildan ortiq xizmat qilsa — kapital qo'yilma: 0820 oshdi → debet. 1510 yopildi → kredit.",
@@ -874,8 +874,8 @@ export const MODULES: Module[] = [
         dt: "1010",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak xom ashyo/materiallar tarkibiga kiritildi.",
-          ru: "Спецодежда отнесена в состав сырья/материалов.",
+          uz: "Qo'shimcha xarajat xom ashyo/materiallar tarkibiga kiritildi.",
+          ru: "Дополнительные расходы отнесены в состав сырья/материалов.",
         },
         why: {
           uz: "Aktiv ishlab chiqarishda sarflansa — material: 1010 oshdi → debet. 1510 yopildi → kredit.",
@@ -887,8 +887,8 @@ export const MODULES: Module[] = [
         dt: "2910",
         kt: "1510",
         op: {
-          uz: "Kiyim-kechak tovar sifatida omborga kiritildi.",
-          ru: "Спецодежда оприходована как товар на складе.",
+          uz: "Qo'shimcha xarajat tovar sifatida omborga kiritildi.",
+          ru: "Дополнительные расходы оприходованы как товар на складе.",
         },
         why: {
           uz: "Aktiv qayta sotish uchun olingan bo'lsa — tovar: 2910 oshdi → debet. 1510 yopildi → kredit.",

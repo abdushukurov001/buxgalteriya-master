@@ -593,7 +593,7 @@ export const TOP_100_ENTRIES: EntrySection[] = [
         debit: "6610",
         credit: "5110",
         description: {
-          uz: "Muassislarga dividendlar bank orqali toʻlab berildi.",
+          uz: "Tasischilarga dividendlar bank orqali toʻlab berildi.",
           ru: "Выплачены дивиденды учредителям через банк.",
         },
       },

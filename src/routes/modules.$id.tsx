@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Check, RotateCcw, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ArrowLeft, Check, RotateCcw, Timer, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EntryCard } from "@/components/EntryCard";
 import { ACCOUNT_MAP } from "@/data/accounts";
 import { MODULES } from "@/data/modules";
 import { useLang } from "@/lib/i18n";
 import { useProgress } from "@/lib/progress";
 import { generateTest, type Question } from "@/lib/questions";
+import { playCorrect, playSuccess, playTick, playTimeUp, playWrong, primeAudio } from "@/lib/sfx";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/modules/$id")({
@@ -118,6 +119,14 @@ function ModulePage() {
   );
 }
 
+const TEST_SECONDS = 15 * 60;
+
+function fmtTime(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
 function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => void }) {
   const { t, tr, lang } = useLang();
   const { saveResult, passMark } = useProgress();
@@ -132,18 +141,58 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
   const [wrong, setWrong] = useState<{ q: Question; chosen: number }[]>([]);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [remaining, setRemaining] = useState(TEST_SECONDS);
+  const [timedOut, setTimedOut] = useState(false);
+  const stateRef = useRef({ score: 0, wrong: [] as { q: Question; chosen: number }[] });
+  stateRef.current = { score, wrong };
 
   const startTest = () => {
+    primeAudio();
     setSeed(Math.floor(Math.random() * 1000000));
     setIndex(0);
     setPicked(null);
     setWrong([]);
     setScore(0);
     setFinished(false);
+    setRemaining(TEST_SECONDS);
+    setTimedOut(false);
     setStarted(true);
   };
 
   const q = questions[index];
+
+  const finishTest = useCallback(
+    (finalScore: number, finalWrong: { q: Question; chosen: number }[]) => {
+      const percent = Math.round((finalScore / questions.length) * 100);
+      saveResult(
+        moduleId,
+        percent,
+        finalWrong.map((w) => w.q.tag),
+      );
+      setFinished(true);
+      if (percent >= 90) setTimeout(() => playSuccess(), 250);
+    },
+    [moduleId, questions.length, saveResult],
+  );
+
+  useEffect(() => {
+    if (!started || finished) return;
+    const id = setInterval(() => {
+      setRemaining((r) => {
+        const nr = r - 1;
+        if (nr <= 0) {
+          clearInterval(id);
+          playTimeUp();
+          setTimedOut(true);
+          finishTest(stateRef.current.score, stateRef.current.wrong);
+          return 0;
+        }
+        if (nr <= 10) playTick();
+        return nr;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [started, finished, finishTest]);
 
   const promptTitle = (question: Question) => {
     switch (question.kind) {
@@ -166,6 +215,10 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
         <p className="font-mono text-3xl">{questions.length}</p>
         <p className="text-sm text-muted-foreground">
           {t("question")} · {passMark}% = {t("done")}
+        </p>
+        <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+          <Timer className="h-3.5 w-3.5" />
+          {t("timeLimit")}
         </p>
         {reviewCount > 0 && (
           <p className="flex items-center justify-center gap-1.5 text-xs text-amber-600">
@@ -194,6 +247,7 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
             {percent}%
           </p>
           <p className="text-sm">{passed ? t("passed") : t("failed")}</p>
+          {timedOut && <p className="text-[13px] text-destructive">{t("timeUpMsg")}</p>}
         </div>
 
         {!passed && wrong.length > 0 && (
@@ -242,20 +296,18 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
   const answer = (i: number) => {
     if (picked !== null) return;
     setPicked(i);
-    if (i === q.correct) setScore((s) => s + 1);
-    else setWrong((w) => [...w, { q, chosen: i }]);
+    if (i === q.correct) {
+      setScore((s) => s + 1);
+      playCorrect();
+    } else {
+      setWrong((w) => [...w, { q, chosen: i }]);
+      playWrong();
+    }
   };
 
   const next = () => {
     if (index + 1 >= questions.length) {
-      const finalScore = score;
-      const percent = Math.round((finalScore / questions.length) * 100);
-      saveResult(
-        moduleId,
-        percent,
-        wrong.map((w) => w.q.tag),
-      );
-      setFinished(true);
+      finishTest(score, wrong);
       return;
     }
     setIndex((n) => n + 1);
@@ -264,6 +316,19 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
 
   return (
     <div className="space-y-4">
+      <div
+        className={cn(
+          "flex items-center justify-center gap-2 rounded-md border px-3 py-2 font-mono transition-all",
+          remaining <= 10
+            ? "animate-pulse border-destructive bg-danger-soft text-2xl font-bold text-destructive"
+            : remaining <= 60
+              ? "border-destructive/40 text-base text-destructive"
+              : "border-border text-sm text-muted-foreground",
+        )}
+      >
+        <Timer className={cn("shrink-0", remaining <= 10 ? "h-6 w-6" : "h-4 w-4")} />
+        {fmtTime(remaining)}
+      </div>
       <div className="flex items-center gap-3">
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
           <div

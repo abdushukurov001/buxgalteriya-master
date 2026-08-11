@@ -217,15 +217,6 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
-    code: "2810x",
-    name: { uz: "-", ru: "-" },
-    kind: "active",
-    note: {
-      uz: "Ishlab chiqarilgan va sotishga tayyor mahsulot zaxirasi.",
-      ru: "Запас изготовленной и готовой к продаже продукции.",
-    },
-  },
-  {
     code: "2910",
     name: { uz: "Ombordagi tovarlar", ru: "Товары на складе" },
     kind: "active",

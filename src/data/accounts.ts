@@ -163,6 +163,15 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "1090",
+    name: { uz: "Boshqa materiallar", ru: "Прочие материалы" },
+    kind: "active",
+    note: {
+      uz: "Chiqindi, metallolom va boshqa qaytariladigan materiallar zaxirasi.",
+      ru: "Запас отходов, металлолома и прочих возвратных материалов.",
+    },
+  },
+  {
     code: "2010",
     name: { uz: "Asosiy ishlab chiqarish", ru: "Основное производство" },
     kind: "active",
@@ -196,6 +205,15 @@ export const ACCOUNTS: Account[] = [
     note: {
       uz: "Ishlab chiqarilgan va sotishga tayyor mahsulot zaxirasi.",
       ru: "Запас изготовленной и готовой к продаже продукции.",
+    },
+  },
+  {
+    code: "2610",
+    name: { uz: "Ishlab chiqarishdagi brak", ru: "Брак в производстве" },
+    kind: "active",
+    note: {
+      uz: "Yaroqsiz mahsulot xarajatlari debetda to'planadi, qoplanadigan summalar kreditda hisobdan chiqariladi.",
+      ru: "Затраты по браку собираются по дебету, возмещения списываются по кредиту.",
     },
   },
   {
@@ -286,6 +304,27 @@ export const ACCOUNTS: Account[] = [
     note: {
       uz: "Naqd pul. Kirim — debet, chiqim — kredit. Qoldiq faqat debet bo'ladi.",
       ru: "Наличные деньги. Приход — дебет, расход — кредит. Остаток только дебетовый.",
+    },
+  },
+  {
+    code: "4710",
+    name: {
+      uz: "Moddiy zarar yetkazganlik uchun xodimlarning qarzi",
+      ru: "Задолженность персонала за причинённый материальный ущерб",
+    },
+    kind: "active",
+    note: {
+      uz: "Aybdor xodimdan undiriladigan zarar summasi — debitorlik qarzi.",
+      ru: "Сумма ущерба, взыскиваемая с виновного работника — дебиторская задолженность.",
+    },
+  },
+  {
+    code: "4860",
+    name: { uz: "Da'volar bo'yicha olinadigan schotlar", ru: "Счета к получению по претензиям" },
+    kind: "active",
+    note: {
+      uz: "Yetkazib beruvchiga qo'yilgan da'vo summasi — undiriladigan debitorlik.",
+      ru: "Сумма претензии к поставщику — дебиторская задолженность к взысканию.",
     },
   },
   {

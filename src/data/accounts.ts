@@ -163,6 +163,15 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "1090",
+    name: { uz: "Boshqa materiallar", ru: "Прочие материалы" },
+    kind: "active",
+    note: {
+      uz: "Chiqindi, metallolom va boshqa qaytariladigan materiallar zaxirasi.",
+      ru: "Запас отходов, металлолома и прочих возвратных материалов.",
+    },
+  },
+  {
     code: "2010",
     name: { uz: "Asosiy ishlab chiqarish", ru: "Основное производство" },
     kind: "active",
@@ -192,6 +201,24 @@ export const ACCOUNTS: Account[] = [
   {
     code: "2810",
     name: { uz: "Ombordagi tayyor mahsulot", ru: "Готовая продукция на складе" },
+    kind: "active",
+    note: {
+      uz: "Ishlab chiqarilgan va sotishga tayyor mahsulot zaxirasi.",
+      ru: "Запас изготовленной и готовой к продаже продукции.",
+    },
+  },
+  {
+    code: "2610",
+    name: { uz: "Ishlab chiqarishdagi brak", ru: "Брак в производстве" },
+    kind: "active",
+    note: {
+      uz: "Yaroqsiz mahsulot xarajatlari debetda to'planadi, qoplanadigan summalar kreditda hisobdan chiqariladi.",
+      ru: "Затраты по браку собираются по дебету, возмещения списываются по кредиту.",
+    },
+  },
+  {
+    code: "2810x",
+    name: { uz: "-", ru: "-" },
     kind: "active",
     note: {
       uz: "Ishlab chiqarilgan va sotishga tayyor mahsulot zaxirasi.",

@@ -1,7 +1,8 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Hash, Library, User } from "lucide-react";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { BookOpen, Hash, Library, User, LogOut } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLang } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 function LangSwitch() {
@@ -26,6 +27,8 @@ function LangSwitch() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useLang();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const nav = [
@@ -35,11 +38,16 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/profile", label: t("navProfile"), icon: User, match: (p: string) => p.startsWith("/profile") },
   ];
 
+  const handleLogout = () => {
+    logout();
+    navigate({ to: "/login" });
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto grid w-full max-w-3xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
-          <Link to="/" className="flex min-w-0 items-center gap-2">
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-3">
+          <Link to="/" className="flex min-w-0 flex-1 items-center gap-2">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary font-mono text-sm text-primary-foreground">
               Dt
             </span>
@@ -50,7 +58,16 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="block truncate text-[11px] text-muted-foreground">{t("tagline")}</span>
             </span>
           </Link>
-          <LangSwitch />
+          <div className="flex items-center gap-2">
+            <LangSwitch />
+            <button
+              onClick={handleLogout}
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              title={t("logoutButton")}
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </header>
 

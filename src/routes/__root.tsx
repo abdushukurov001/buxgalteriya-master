@@ -4,6 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,6 +14,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { LanguageProvider } from "../lib/i18n";
 import { ProgressProvider } from "../lib/progress";
+import { AuthProvider, useAuth } from "../lib/auth";
 import { AppShell } from "../components/AppShell";
 import { Toaster } from "../components/ui/sonner";
 
@@ -127,19 +130,54 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthGuard({ children }: { children: ReactNode }) {
+  const { isAuthenticated, role } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  // Public routes that don't require auth
+  const isPublicRoute = pathname === "/login" || pathname.startsWith("/register/");
+
+  useEffect(() => {
+    if (!isAuthenticated && !isPublicRoute) {
+      navigate({ to: "/login" });
+    }
+  }, [isAuthenticated, isPublicRoute, navigate]);
+
+  // If on public route, render without shell
+  if (isPublicRoute) {
+    return <>{children}</>;
+  }
+
+  // If not authenticated and not on public route, don't render
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // SuperAdmin and Admin have their own layout, skip AppShell
+  if (role === "superadmin" || role === "admin") {
+    return <>{children}</>;
+  }
+
+  // Students use the existing AppShell
+  return <AppShell>{children}</AppShell>;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <ProgressProvider>
-          <AppShell>
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-          </AppShell>
-          <Toaster position="top-center" />
-        </ProgressProvider>
+        <AuthProvider>
+          <ProgressProvider>
+            <AuthGuard>
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <Outlet />
+            </AuthGuard>
+            <Toaster position="top-center" />
+          </ProgressProvider>
+        </AuthProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

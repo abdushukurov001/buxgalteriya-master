@@ -11,9 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ReferenceRouteImport } from './routes/reference'
+import { Route as SuperadminRouteImport } from './routes/superadmin'
 import { Route as ModulesIdRouteImport } from './routes/modules.$id'
+import { Route as RegisterCenterIdGroupIdRouteImport } from './routes/register.$centerId.$groupId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +27,16 @@ const IndexRoute = IndexRouteImport.update({
 const AccountsRoute = AccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -35,49 +49,102 @@ const ReferenceRoute = ReferenceRouteImport.update({
   path: '/reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SuperadminRoute = SuperadminRouteImport.update({
+  id: '/superadmin',
+  path: '/superadmin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesIdRoute = ModulesIdRouteImport.update({
   id: '/modules/$id',
   path: '/modules/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterCenterIdGroupIdRoute = RegisterCenterIdGroupIdRouteImport.update({
+  id: '/register/$centerId/$groupId',
+  path: '/register/$centerId/$groupId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/superadmin': typeof SuperadminRoute
   '/modules/$id': typeof ModulesIdRoute
+  '/register/$centerId/$groupId': typeof RegisterCenterIdGroupIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/superadmin': typeof SuperadminRoute
   '/modules/$id': typeof ModulesIdRoute
+  '/register/$centerId/$groupId': typeof RegisterCenterIdGroupIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
+  '/superadmin': typeof SuperadminRoute
   '/modules/$id': typeof ModulesIdRoute
+  '/register/$centerId/$groupId': typeof RegisterCenterIdGroupIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
+  fullPaths:
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/login'
+    | '/profile'
+    | '/reference'
+    | '/superadmin'
+    | '/modules/$id'
+    | '/register/$centerId/$groupId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
+  to:
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/login'
+    | '/profile'
+    | '/reference'
+    | '/superadmin'
+    | '/modules/$id'
+    | '/register/$centerId/$groupId'
   id:
-    '__root__' | '/' | '/accounts' | '/profile' | '/reference' | '/modules/$id'
+    | '__root__'
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/login'
+    | '/profile'
+    | '/reference'
+    | '/superadmin'
+    | '/modules/$id'
+    | '/register/$centerId/$groupId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsRoute: typeof AccountsRoute
+  AdminRoute: typeof AdminRoute
+  LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   ReferenceRoute: typeof ReferenceRoute
+  SuperadminRoute: typeof SuperadminRoute
   ModulesIdRoute: typeof ModulesIdRoute
+  RegisterCenterIdGroupIdRoute: typeof RegisterCenterIdGroupIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -96,6 +163,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -110,11 +191,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/superadmin': {
+      id: '/superadmin'
+      path: '/superadmin'
+      fullPath: '/superadmin'
+      preLoaderRoute: typeof SuperadminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/$id': {
       id: '/modules/$id'
       path: '/modules/$id'
       fullPath: '/modules/$id'
       preLoaderRoute: typeof ModulesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register/$centerId/$groupId': {
+      id: '/register/$centerId/$groupId'
+      path: '/register/$centerId/$groupId'
+      fullPath: '/register/$centerId/$groupId'
+      preLoaderRoute: typeof RegisterCenterIdGroupIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -123,10 +218,24 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
+  AdminRoute: AdminRoute,
+  LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   ReferenceRoute: ReferenceRoute,
+  SuperadminRoute: SuperadminRoute,
   ModulesIdRoute: ModulesIdRoute,
+  RegisterCenterIdGroupIdRoute: RegisterCenterIdGroupIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

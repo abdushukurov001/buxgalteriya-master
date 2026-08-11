@@ -307,6 +307,27 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "4710",
+    name: {
+      uz: "Moddiy zarar yetkazganlik uchun xodimlarning qarzi",
+      ru: "Задолженность персонала за причинённый материальный ущерб",
+    },
+    kind: "active",
+    note: {
+      uz: "Aybdor xodimdan undiriladigan zarar summasi — debitorlik qarzi.",
+      ru: "Сумма ущерба, взыскиваемая с виновного работника — дебиторская задолженность.",
+    },
+  },
+  {
+    code: "4860",
+    name: { uz: "Da'volar bo'yicha olinadigan schotlar", ru: "Счета к получению по претензиям" },
+    kind: "active",
+    note: {
+      uz: "Yetkazib beruvchiga qo'yilgan da'vo summasi — undiriladigan debitorlik.",
+      ru: "Сумма претензии к поставщику — дебиторская задолженность к взысканию.",
+    },
+  },
+  {
     code: "5110",
     name: { uz: "Hisob-kitob schyotidagi pul mablag'lari", ru: "Денежные средства на расчётном счёте" },
     kind: "active",

@@ -77,6 +77,13 @@ export const dict = {
     uz: "ta savol oldingi mavzulardan (takrorlash)",
     ru: "вопр. из предыдущих тем (повторение)",
   },
+  timeLimit: { uz: "Vaqt: 15 daqiqa", ru: "Время: 15 минут" },
+  timeLeft: { uz: "Qolgan vaqt", ru: "Осталось времени" },
+  timeUp: { uz: "Vaqt tugadi!", ru: "Время вышло!" },
+  timeUpMsg: {
+    uz: "Vaqt tugadi — javob berilgan savollar bo'yicha natija hisoblandi.",
+    ru: "Время вышло — результат подсчитан по отвеченным вопросам.",
+  },
 } as const;
 
 export type DictKey = keyof typeof dict;

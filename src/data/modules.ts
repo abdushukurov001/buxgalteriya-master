@@ -989,6 +989,215 @@ export const MODULES: Module[] = [
       },
     ],
   },
+  {
+    id: 10,
+    title: {
+      uz: "10-Mavzu: Ishlab chiqarish xarajatlari, tayyor mahsulot va brak hisobi",
+      ru: "Тема 10: Затраты производства, готовая продукция и учёт брака",
+    },
+    summary: {
+      uz: "2010 da tannarxni shakllantirish (material, ish haqi, ijtimoiy soliq, xizmatlar), tayyor mahsulotni omborga kirim qilish hamda 2610 orqali brakni hisobga olish va zararni qoplash.",
+      ru: "Формирование себестоимости на 2010 (материалы, зарплата, соцналог, услуги), оприходование готовой продукции и учёт брака через 2610 с возмещением потерь.",
+    },
+    accounts: ["2010", "1010", "1090", "2810", "2610", "6710", "6520", "6010", "4710", "4860", "9430"],
+    entries: [
+      {
+        id: "m10e1",
+        dt: "2010",
+        kt: "1010",
+        op: {
+          uz: "Xom-ashyo ishlab chiqarishga berildi.",
+          ru: "Сырьё отпущено в производство.",
+        },
+        why: {
+          uz: "2010 (kalkulyatsiya schoti) xarajat to'planadi → debet. 1010 zaxirasi kamaydi → kredit.",
+          ru: "На 2010 (калькуляционный счёт) накапливаются затраты → дебет. Запас 1010 уменьшился → кредит.",
+        },
+      },
+      {
+        id: "m10e2",
+        dt: "2010",
+        kt: "6710",
+        op: {
+          uz: "Ishlab chiqarishga oylik hisoblandi.",
+          ru: "Начислена зарплата производственным рабочим.",
+        },
+        why: {
+          uz: "Ish haqi tannarxga kiradi: 2010 → debet. 6710 (xodimlar oldidagi majburiyat, passiv) oshdi → kredit.",
+          ru: "Зарплата входит в себестоимость: 2010 → дебет. 6710 (обязательство перед персоналом, пассив) выросло → кредит.",
+        },
+      },
+      {
+        id: "m10e3",
+        dt: "2010",
+        kt: "6520",
+        op: {
+          uz: "Ishlab chiqarishga ijtimoiy soliq hisoblandi.",
+          ru: "Начислен социальный налог на производство.",
+        },
+        why: {
+          uz: "Soliq ham tannarx xarajati: 2010 → debet. 6520 (byudjetdan tashqari jamg'armaga qarz, passiv) oshdi → kredit.",
+          ru: "Налог тоже затрата себестоимости: 2010 → дебет. 6520 (долг перед фондом, пассив) вырос → кредит.",
+        },
+      },
+      {
+        id: "m10e4",
+        dt: "2010",
+        kt: "6010",
+        op: {
+          uz: "Ishlab chiqarishga xizmat sotib olindi.",
+          ru: "Приобретены услуги для производства.",
+        },
+        why: {
+          uz: "Xizmat qiymati tannarxga qo'shildi: 2010 → debet. 6010 (ta'minotchi oldidagi qarz) oshdi → kredit.",
+          ru: "Стоимость услуг включена в себестоимость: 2010 → дебет. 6010 (долг поставщику) вырос → кредит.",
+        },
+      },
+      {
+        id: "m10e5",
+        dt: "2810",
+        kt: "2010",
+        op: {
+          uz: "Omborga tayyor mahsulot kirim qilindi.",
+          ru: "Готовая продукция оприходована на склад.",
+        },
+        why: {
+          uz: "2810 (tayyor mahsulot zaxirasi) oshdi → debet. 2010 dagi to'plangan tannarx yopiladi → kredit.",
+          ru: "2810 (запас готовой продукции) вырос → дебет. Накопленная себестоимость 2010 закрывается → кредит.",
+        },
+      },
+      {
+        id: "m10e6",
+        dt: "2610",
+        kt: "2010",
+        op: {
+          uz: "Yaroqsiz (brak) mahsulot aniqlandi va uning tannarxi brak schotiga o'tkazildi.",
+          ru: "Выявлен брак, его себестоимость отнесена на счёт брака.",
+        },
+        why: {
+          uz: "Brak xarajati alohida hisobga olinadi: 2610 → debet. Asosiy ishlab chiqarishdan chiqarildi: 2010 → kredit.",
+          ru: "Потери по браку учитываются отдельно: 2610 → дебет. Списано с основного производства: 2010 → кредит.",
+        },
+      },
+      {
+        id: "m10e7",
+        dt: "1010",
+        kt: "2610",
+        op: {
+          uz: "Brak mahsulot xom-ashyo sifatida omborga qaytarib kirim qilindi.",
+          ru: "Бракованная продукция оприходована на склад как сырьё.",
+        },
+        why: {
+          uz: "Qaytarilgan qiymat zaxirani oshiradi: 1010 → debet. Brak yo'qotishi shu summaga kamaydi: 2610 → kredit.",
+          ru: "Возвратная стоимость увеличивает запас: 1010 → дебет. Потери по браку уменьшаются: 2610 → кредит.",
+        },
+      },
+      {
+        id: "m10e8",
+        dt: "1090",
+        kt: "2610",
+        op: {
+          uz: "Brak metallolom/boshqa material sifatida kirim qilindi.",
+          ru: "Брак оприходован как металлолом/прочие материалы.",
+        },
+        why: {
+          uz: "1090 (boshqa materiallar) oshdi → debet. Brakdan qoplangan qism: 2610 → kredit.",
+          ru: "1090 (прочие материалы) выросли → дебет. Возмещённая часть брака: 2610 → кредит.",
+        },
+      },
+      {
+        id: "m10e9",
+        dt: "4710",
+        kt: "2610",
+        op: {
+          uz: "Brak zarari aybdor xodim hisobidan undirilishi hisoblandi.",
+          ru: "Потери от брака отнесены на виновного работника.",
+        },
+        why: {
+          uz: "4710 (xodim qarzi, aktiv) oshdi → debet. Brak yo'qotishi kamaydi: 2610 → kredit.",
+          ru: "4710 (долг работника, актив) вырос → дебет. Потери по браку уменьшились: 2610 → кредит.",
+        },
+      },
+      {
+        id: "m10e10",
+        dt: "4860",
+        kt: "2610",
+        op: {
+          uz: "Brak sifatsiz xom-ashyo bergan yetkazib beruvchiga da'vo sifatida qo'yildi.",
+          ru: "Потери от брака предъявлены претензией поставщику некачественного сырья.",
+        },
+        why: {
+          uz: "4860 (da'vo bo'yicha debitorlik) oshdi → debet. Brak schoti shu summaga yopildi: 2610 → kredit.",
+          ru: "4860 (дебиторка по претензии) выросла → дебет. Счёт брака закрыт на эту сумму: 2610 → кредит.",
+        },
+      },
+      {
+        id: "m10e11",
+        dt: "2610",
+        kt: "1010",
+        op: {
+          uz: "Brakni tuzatish uchun xom-ashyo sarflandi.",
+          ru: "На исправление брака израсходовано сырьё.",
+        },
+        why: {
+          uz: "Tuzatish xarajati ham brak schotida to'planadi: 2610 → debet. Material zaxirasi kamaydi: 1010 → kredit.",
+          ru: "Затраты на исправление собираются на счёте брака: 2610 → дебет. Запас материалов уменьшился: 1010 → кредит.",
+        },
+      },
+      {
+        id: "m10e12",
+        dt: "2610",
+        kt: "6710",
+        op: {
+          uz: "Brakni tuzatgan ishchiga ish haqi hisoblandi.",
+          ru: "Начислена зарплата рабочему за исправление брака.",
+        },
+        why: {
+          uz: "2610 (tuzatish xarajati) → debet. 6710 (xodim oldidagi majburiyat) oshdi → kredit.",
+          ru: "2610 (затраты на исправление) → дебет. 6710 (обязательство перед работником) выросло → кредит.",
+        },
+      },
+      {
+        id: "m10e13",
+        dt: "2610",
+        kt: "6520",
+        op: {
+          uz: "Brakni tuzatish ish haqidan ijtimoiy soliq hisoblandi.",
+          ru: "Начислен социальный налог с зарплаты за исправление брака.",
+        },
+        why: {
+          uz: "Soliq ham tuzatish xarajati: 2610 → debet. 6520 (jamg'arma oldidagi qarz) oshdi → kredit.",
+          ru: "Налог — тоже затрата на исправление: 2610 → дебет. 6520 (долг перед фондом) вырос → кредит.",
+        },
+      },
+      {
+        id: "m10e14",
+        dt: "2010",
+        kt: "2610",
+        op: {
+          uz: "Tuzatib bo'lmaydigan brakning sof zarari mahsulot tannarxiga qo'shildi.",
+          ru: "Чистые потери от неисправимого брака включены в себестоимость продукции.",
+        },
+        why: {
+          uz: "Qoplanmagan qoldiq tannarxga o'tadi: 2010 → debet. 2610 yopiladi → kredit.",
+          ru: "Невозмещённый остаток переходит в себестоимость: 2010 → дебет. 2610 закрывается → кредит.",
+        },
+      },
+      {
+        id: "m10e15",
+        dt: "9430",
+        kt: "2610",
+        op: {
+          uz: "Normadan ortiqcha (favqulodda) brak zarari boshqa operatsion xarajatga olib borildi.",
+          ru: "Сверхнормативные потери от брака отнесены на прочие операционные расходы.",
+        },
+        why: {
+          uz: "Bunday zarar tannarxga kirmaydi: 9430 (davr xarajati) → debet. 2610 yopiladi → kredit.",
+          ru: "Такие потери не входят в себестоимость: 9430 (расход периода) → дебет. 2610 закрывается → кредит.",
+        },
+      },
+    ],
+  },
 ];
 
 

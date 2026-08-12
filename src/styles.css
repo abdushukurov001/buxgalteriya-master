@@ -203,3 +203,48 @@ a[href*="lovable.dev"] {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* Equalizer animations for the background music widget */
+@keyframes equalizer-pulse {
+  0%, 100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.equalizer-container {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 12px;
+}
+
+.equalizer-bar {
+  width: 2px;
+  height: 100%;
+  background-color: var(--gold);
+  border-radius: 1px;
+  transform-origin: bottom;
+  transform: scaleY(0.2);
+  transition: transform 0.2s ease;
+}
+
+.equalizer-bar.animate {
+  animation: equalizer-pulse 1s ease-in-out infinite;
+}
+
+.equalizer-bar-1 {
+  animation-delay: 0.1s !important;
+}
+
+.equalizer-bar-2 {
+  animation-delay: 0.5s !important;
+}
+
+.equalizer-bar-3 {
+  animation-delay: 0.3s !important;
+}
+

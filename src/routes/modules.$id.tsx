@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EntryCard } from "@/components/EntryCard";
 import { ACCOUNT_MAP } from "@/data/accounts";
 import { MODULES } from "@/data/modules";
+import { ambientPlayer } from "@/lib/ambient";
 import { useLang } from "@/lib/i18n";
 import { useProgress } from "@/lib/progress";
 import { generateTest, type Question } from "@/lib/questions";
@@ -145,6 +146,18 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
   const [timedOut, setTimedOut] = useState(false);
   const stateRef = useRef({ score: 0, wrong: [] as { q: Question; chosen: number }[] });
   stateRef.current = { score, wrong };
+
+  // Auto-play ambient background music during test
+  useEffect(() => {
+    if (started && !finished) {
+      ambientPlayer.start();
+    } else {
+      ambientPlayer.stop();
+    }
+    return () => {
+      ambientPlayer.stop();
+    };
+  }, [started, finished]);
 
   const startTest = () => {
     primeAudio();
@@ -329,6 +342,7 @@ function TestRunner({ moduleId, onReview }: { moduleId: number; onReview: () => 
         <Timer className={cn("shrink-0", remaining <= 10 ? "h-6 w-6" : "h-4 w-4")} />
         {fmtTime(remaining)}
       </div>
+
       <div className="flex items-center gap-3">
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
           <div

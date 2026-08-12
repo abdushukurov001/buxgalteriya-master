@@ -132,6 +132,12 @@ export const dict = {
   centerNotFound: { uz: "O'quv markaz topilmadi", ru: "Учебный центр не найден" },
   groupNotFound: { uz: "Guruh topilmadi", ru: "Группа не найдена" },
   registerSuccess: { uz: "Muvaffaqiyatli ro'yxatdan o'tdingiz!", ru: "Вы успешно зарегистрировались!" },
+  musicControlTitle: { uz: "Fon musiqasi", ru: "Фоновая музыка" },
+  musicVolume: { uz: "Musiqa ovozi", ru: "Громкость музыки" },
+  musicStatusMuted: { uz: "O'chirilgan", ru: "Выкл" },
+  musicStatusLow: { uz: "Past", ru: "Тихо" },
+  musicStatusMedium: { uz: "O'rtacha", ru: "Средне" },
+  musicStatusHigh: { uz: "Baland", ru: "Громко" },
 } as const;
 
 export type DictKey = keyof typeof dict;

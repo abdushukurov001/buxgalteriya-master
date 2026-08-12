@@ -154,12 +154,13 @@ function AuthGuard({ children }: { children: ReactNode }) {
     return null;
   }
 
-  // SuperAdmin and Admin have their own layout, skip AppShell
-  if (role === "superadmin" || role === "admin") {
+  // SuperAdmin and Admin skip AppShell only on their own dashboard routes
+  const isAdminRoute = pathname === "/admin" || pathname === "/superadmin";
+  if ((role === "superadmin" || role === "admin") && isAdminRoute) {
     return <>{children}</>;
   }
 
-  // Students use the existing AppShell
+  // Everyone else (students, and admin/superadmin on non-admin pages) uses AppShell
   return <AppShell>{children}</AppShell>;
 }
 

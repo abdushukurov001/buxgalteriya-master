@@ -175,6 +175,48 @@ export function deleteStudent(id: string): void {
   setItem(STUDENTS_KEY, students);
 }
 
+// ─── Password reset ────────────────────────────────────────────────────────
+export function updateCenterPassword(centerId: string, newPassword: string): void {
+  if (newPassword.length < 6) throw new Error("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
+  const centers = getCenters();
+  const idx = centers.findIndex((c) => c.id === centerId);
+  const found = centers[idx];
+  if (!found) throw new Error("O'quv markaz topilmadi");
+  centers[idx] = { ...found, password: newPassword };
+  setItem(CENTERS_KEY, centers);
+}
+
+export function updateStudentPassword(
+  studentId: string,
+  newPassword: string,
+  centerId?: string,
+): void {
+  if (newPassword.length < 6) throw new Error("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
+  const students = getStudents();
+  const idx = students.findIndex((s) => s.id === studentId);
+  const found = students[idx];
+  if (!found) throw new Error("O'quvchi topilmadi");
+  // Admin faqat o'z markazidagi o'quvchi parolini yangilay oladi
+  if (centerId && found.centerId !== centerId) {
+    throw new Error("Bu o'quvchi sizning markazingizga tegishli emas");
+  }
+  students[idx] = { ...found, password: newPassword };
+  setItem(STUDENTS_KEY, students);
+}
+
+export function searchStudents(centerId: string, query: string): Student[] {
+  const q = query.trim().toLowerCase();
+  const list = getStudentsByCenter(centerId);
+  if (!q) return list;
+  const digits = q.replace(/\D/g, "");
+  return list.filter(
+    (s) =>
+      s.fullName.toLowerCase().includes(q) ||
+      s.phone.toLowerCase().includes(q) ||
+      (digits.length > 0 && s.phone.replace(/\D/g, "").includes(digits)),
+  );
+}
+
 // ─── Registration Link ────────────────────────────────────────────────────
 export function generateRegistrationLink(centerId: string, groupId: string): string {
   const base = typeof window !== "undefined" ? window.location.origin : "";

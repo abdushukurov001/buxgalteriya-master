@@ -180,8 +180,9 @@ export function updateCenterPassword(centerId: string, newPassword: string): voi
   if (newPassword.length < 6) throw new Error("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
   const centers = getCenters();
   const idx = centers.findIndex((c) => c.id === centerId);
-  if (idx === -1) throw new Error("O'quv markaz topilmadi");
-  centers[idx] = { ...centers[idx], password: newPassword };
+  const found = centers[idx];
+  if (!found) throw new Error("O'quv markaz topilmadi");
+  centers[idx] = { ...found, password: newPassword };
   setItem(CENTERS_KEY, centers);
 }
 
@@ -193,12 +194,13 @@ export function updateStudentPassword(
   if (newPassword.length < 6) throw new Error("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
   const students = getStudents();
   const idx = students.findIndex((s) => s.id === studentId);
-  if (idx === -1) throw new Error("O'quvchi topilmadi");
+  const found = students[idx];
+  if (!found) throw new Error("O'quvchi topilmadi");
   // Admin faqat o'z markazidagi o'quvchi parolini yangilay oladi
-  if (centerId && students[idx].centerId !== centerId) {
+  if (centerId && found.centerId !== centerId) {
     throw new Error("Bu o'quvchi sizning markazingizga tegishli emas");
   }
-  students[idx] = { ...students[idx], password: newPassword };
+  students[idx] = { ...found, password: newPassword };
   setItem(STUDENTS_KEY, students);
 }
 

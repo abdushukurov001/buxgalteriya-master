@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const s: Session = {
             role: "student",
             userId: student.id,
-            centerName: centerInfo?.name,
+            ...(centerInfo ? { centerName: centerInfo.name } : {}),
           };
           setSession(s);
           setSessionState(s);

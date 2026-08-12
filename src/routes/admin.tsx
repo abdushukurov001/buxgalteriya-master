@@ -11,6 +11,7 @@ import {
   deleteStudent,
   generateRegistrationLink,
   getGroupById,
+  updateStudentPassword,
   type Group,
   type Student,
 } from "@/lib/store";
@@ -28,8 +29,10 @@ import {
   Phone,
   Calendar,
   Copy,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ResetPasswordDialog } from "./superadmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -49,6 +52,7 @@ function AdminPage() {
   const refresh = useCallback(() => setTick((prev) => prev + 1), []);
   const [activeTab, setActiveTab] = useState<"groups" | "students">("groups");
   const [filterGroup, setFilterGroup] = useState<string>("all");
+  const [search, setSearch] = useState("");
 
   // Guard: only admin
   if (role !== "admin" || !session) {
@@ -61,8 +65,17 @@ function AdminPage() {
   const groups = getGroupsByCenter(centerId);
   const students = getStudentsByCenter(centerId);
 
-  const filteredStudents =
-    filterGroup === "all" ? students : getStudentsByGroup(filterGroup);
+  const byGroup = filterGroup === "all" ? students : getStudentsByGroup(filterGroup);
+  const q = search.trim().toLowerCase();
+  const digits = q.replace(/\D/g, "");
+  const filteredStudents = q
+    ? byGroup.filter(
+        (s) =>
+          s.fullName.toLowerCase().includes(q) ||
+          s.phone.toLowerCase().includes(q) ||
+          (digits.length > 0 && s.phone.replace(/\D/g, "").includes(digits)),
+      )
+    : byGroup;
 
   const tabs = [
     { key: "groups" as const, label: t("groups"), icon: Layers, count: groups.length },
@@ -155,6 +168,9 @@ function AdminPage() {
             groups={groups}
             filterGroup={filterGroup}
             onFilterChange={setFilterGroup}
+            search={search}
+            onSearchChange={setSearch}
+            centerId={centerId}
             onChanged={refresh}
           />
         )}
@@ -367,18 +383,36 @@ function StudentsTab({
   groups,
   filterGroup,
   onFilterChange,
+  search,
+  onSearchChange,
+  centerId,
   onChanged,
 }: {
   students: Student[];
   groups: Group[];
   filterGroup: string;
   onFilterChange: (v: string) => void;
+  search: string;
+  onSearchChange: (v: string) => void;
+  centerId: string;
   onChanged: () => void;
 }) {
   const { t } = useLang();
 
   return (
     <div className="space-y-4">
+      {/* Search by name or phone */}
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Ism familiya yoki telefon raqam bo'yicha qidirish..."
+          className="flex h-11 w-full rounded-lg border border-input bg-background pl-10 pr-4 text-sm transition-colors placeholder:text-muted-foreground/60 focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+        />
+      </div>
+
       {/* Group filter */}
       {groups.length > 0 && (
         <div className="flex items-center gap-3">
@@ -407,7 +441,12 @@ function StudentsTab({
       ) : (
         <div className="space-y-2">
           {students.map((student) => (
-            <StudentCard key={student.id} student={student} onDeleted={onChanged} />
+            <StudentCard
+              key={student.id}
+              student={student}
+              centerId={centerId}
+              onDeleted={onChanged}
+            />
           ))}
         </div>
       )}
@@ -418,9 +457,11 @@ function StudentsTab({
 // ─── Student Card ──────────────────────────────────────────────────────────
 function StudentCard({
   student,
+  centerId,
   onDeleted,
 }: {
   student: Student;
+  centerId: string;
   onDeleted: () => void;
 }) {
   const { t } = useLang();
@@ -457,7 +498,12 @@ function StudentCard({
           </span>
         </div>
       </div>
-      <div className="shrink-0">
+      <div className="flex shrink-0 items-center gap-1.5">
+        <ResetPasswordDialog
+          title="O'quvchi parolini tiklash"
+          subject={`${student.fullName} — ${student.phone}`}
+          onSubmit={(pwd) => updateStudentPassword(student.id, pwd, centerId)}
+        />
         {showConfirm ? (
           <div className="flex items-center gap-1.5 animate-in fade-in">
             <button

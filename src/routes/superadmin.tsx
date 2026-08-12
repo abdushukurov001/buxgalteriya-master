@@ -7,6 +7,7 @@ import {
   addCenter,
   deleteCenter,
   getCenterStats,
+  updateCenterPassword,
   type LearningCenter,
 } from "@/lib/store";
 import {
@@ -20,6 +21,8 @@ import {
   X,
   Eye,
   EyeOff,
+  KeyRound,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -47,6 +50,13 @@ function SuperAdminPage() {
   }
 
   const centers = getCenters();
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const visibleCenters = q
+    ? centers.filter(
+        (c) => c.name.toLowerCase().includes(q) || c.login.toLowerCase().includes(q),
+      )
+    : centers;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -98,15 +108,34 @@ function SuperAdminPage() {
         {/* Add Center Button + Dialog */}
         <AddCenterDialog onAdded={refresh} />
 
+        {/* Search */}
+        {centers.length > 0 && (
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Nomi yoki login bo'yicha qidirish..."
+              className="flex h-11 w-full rounded-lg border border-input bg-background pl-10 pr-4 text-sm transition-colors placeholder:text-muted-foreground/60 focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+            />
+          </div>
+        )}
+
         {/* Centers List */}
         {centers.length === 0 ? (
           <div className="paper-card flex flex-col items-center gap-3 p-12 text-center">
             <Building2 className="h-12 w-12 text-muted-foreground/40" />
             <p className="text-sm text-muted-foreground">{t("noCenters")}</p>
           </div>
+        ) : visibleCenters.length === 0 ? (
+          <div className="paper-card flex flex-col items-center gap-3 p-12 text-center">
+            <Search className="h-10 w-10 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">Hech narsa topilmadi</p>
+          </div>
         ) : (
           <div className="space-y-3">
-            {centers.map((center) => (
+            {visibleCenters.map((center) => (
               <CenterCard key={center.id} center={center} onDeleted={refresh} />
             ))}
           </div>
@@ -185,6 +214,12 @@ function CenterCard({
           </div>
         </div>
         <div className="shrink-0">
+          <div className="flex items-center gap-1.5">
+          <ResetPasswordDialog
+            title="Admin parolini tiklash"
+            subject={`${center.name} (${center.login})`}
+            onSubmit={(pwd) => updateCenterPassword(center.id, pwd)}
+          />
           {showConfirm ? (
             <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2">
               <button
@@ -209,9 +244,131 @@ function CenterCard({
               <Trash2 className="h-4 w-4" />
             </button>
           )}
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Reset Password Dialog ─────────────────────────────────────────────────
+export function ResetPasswordDialog({
+  title,
+  subject,
+  onSubmit,
+}: {
+  title: string;
+  subject: string;
+  onSubmit: (password: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [pwd, setPwd] = useState("");
+  const [pwd2, setPwd2] = useState("");
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+
+  const reset = () => {
+    setPwd("");
+    setPwd2("");
+    setShow(false);
+    setError("");
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (pwd.length < 6) {
+      setError("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
+      return;
+    }
+    if (pwd !== pwd2) {
+      setError("Parollar mos kelmadi");
+      return;
+    }
+    try {
+      onSubmit(pwd);
+      toast.success("Parol yangilandi");
+      reset();
+      setOpen(false);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { if (!v) reset(); setOpen(v); }}>
+      <DialogTrigger asChild>
+        <button
+          className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-gold-soft hover:text-gold"
+          title={title}
+        >
+          <KeyRound className="h-4 w-4" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[420px]">
+        <DialogHeader>
+          <DialogTitle className="font-serif text-xl font-bold">{title}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+          <p className="text-sm text-muted-foreground">{subject}</p>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Yangi parol</label>
+            <div className="relative">
+              <input
+                type={show ? "text" : "password"}
+                value={pwd}
+                onChange={(e) => setPwd(e.target.value)}
+                placeholder="••••••"
+                required
+                minLength={6}
+                autoFocus
+                className="flex h-11 w-full rounded-lg border border-input bg-background px-4 pr-10 text-sm transition-colors focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+              />
+              <button
+                type="button"
+                onClick={() => setShow(!show)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                tabIndex={-1}
+              >
+                {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Parolni tasdiqlang</label>
+            <input
+              type={show ? "text" : "password"}
+              value={pwd2}
+              onChange={(e) => setPwd2(e.target.value)}
+              placeholder="••••••"
+              required
+              minLength={6}
+              className="flex h-11 w-full rounded-lg border border-input bg-background px-4 text-sm transition-colors focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+            />
+          </div>
+          {error && (
+            <div className="rounded-lg bg-danger-soft px-4 py-2.5 text-sm font-medium text-destructive">
+              {error}
+            </div>
+          )}
+          <div className="mt-6 flex items-center justify-end gap-2 border-t border-border pt-4">
+            <button
+              type="button"
+              onClick={() => { reset(); setOpen(false); }}
+              className="h-10 cursor-pointer rounded-lg border border-border px-4 text-sm font-medium transition-colors hover:bg-secondary"
+            >
+              Bekor qilish
+            </button>
+            <button
+              type="submit"
+              className="h-10 cursor-pointer rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+            >
+              Saqlash
+            </button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 

@@ -2,7 +2,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, RotateCcw, Timer, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EntryCard } from "@/components/EntryCard";
-import { ACCOUNT_MAP } from "@/data/accounts";
 import { MODULES } from "@/data/modules";
 import { ambientPlayer } from "@/lib/ambient";
 import { useLang } from "@/lib/i18n";

@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const nav = [
     { to: "/accounts", label: t("navAccounts"), icon: Hash, match: (p: string) => p.startsWith("/accounts") },
     { to: "/", label: t("navModules"), icon: BookOpen, match: (p: string) => p === "/" || p.startsWith("/modules") },
-    { to: "/practices", label: t("navPractices"), icon: ClipboardList, match: (p: string) => p.startsWith("/practices") },
+    { to: "/practices", label: "Mashqlar", icon: ClipboardList, match: (p: string) => p.startsWith("/practices") },
     { to: "/reference", label: t("navReference"), icon: Library, match: (p: string) => p.startsWith("/reference") },
     { to: "/profile", label: t("navProfile"), icon: User, match: (p: string) => p.startsWith("/profile") },
   ];
@@ -83,12 +83,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex flex-col items-center gap-1 py-2.5 text-[11px] transition-colors",
+                  "flex flex-col items-center gap-0.5 py-2 text-[10px] leading-tight transition-colors",
                   active ? "text-emerald-ink font-semibold" : "text-muted-foreground",
                 )}
               >
-                <item.icon className={cn("h-5 w-5", active && "stroke-[2.4]")} />
-                {item.label}
+                <item.icon className={cn("h-5 w-5 shrink-0", active && "stroke-[2.4]")} />
+                <span className="text-center leading-tight max-w-[52px] truncate">{item.label}</span>
               </Link>
             );
           })}

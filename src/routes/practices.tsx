@@ -59,7 +59,7 @@ function PracticesPage() {
         </div>
         <h1 className="font-serif text-xl font-semibold">{t("practiceScoreLabel")}</h1>
         <p className="text-[13px] text-muted-foreground leading-relaxed">
-          Real korxona faoliyatining to'liq xo'jalik operatsiyalari zanjiri. Debet, Kredit va Summalarni ketma-ket hisoblang. Barcha savollar bitta ro'yxatda berilgan bo'lib, xohlagancha tepaga scroll qilib avvalgi hisob-kitoblarni ko'rishingiz mumkin.
+          Real korxona faoliyatining to'liq xo'jalik operatsiyalari zanjiri. Debet, Kredit va Summalarni ketma-ket hisoblang.
         </p>
       </header>
 
@@ -70,35 +70,39 @@ function PracticesPage() {
           return (
             <div
               key={c.id}
-              className="paper-card space-y-3 p-5 transition-all hover:border-emerald-ink/50"
+              className="paper-card space-y-3 p-4 transition-all hover:border-emerald-ink/50"
             >
+              {/* Top row: info + score badge */}
               <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1 min-w-0">
+                <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-emerald-ink shrink-0" />
-                    <span className="font-mono text-xs font-semibold text-emerald-ink">{c.company}</span>
+                    <span className="font-mono text-xs font-semibold text-emerald-ink truncate">{c.company}</span>
                   </div>
-                  <h2 className="font-serif text-base font-semibold truncate">{tr(c.title)}</h2>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{tr(c.subtitle)}</p>
+                  <h2 className="font-serif text-sm font-semibold leading-snug line-clamp-2">{tr(c.title)}</h2>
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{tr(c.subtitle)}</p>
                 </div>
                 {res && (
-                  <div className="shrink-0 rounded-md bg-emerald-soft border border-emerald-ink/30 px-3 py-1.5 text-center font-mono">
-                    <p className="text-[10px] text-emerald-ink uppercase font-sans">Eng yaxshi ball</p>
-                    <p className="text-base font-bold text-emerald-ink">
+                  <div className="shrink-0 rounded-md bg-emerald-soft border border-emerald-ink/30 px-2.5 py-1.5 text-center font-mono">
+                    <p className="text-[9px] text-emerald-ink uppercase font-sans whitespace-nowrap">Eng yaxshi ball</p>
+                    <p className="text-sm font-bold text-emerald-ink">
                       {res.firstTryCorrect}/{res.totalSteps}
                     </p>
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-                <span className="font-mono">{c.steps.length} ta bog'liq operatsiya</span>
+              {/* Bottom row: steps count + start button */}
+              <div className="flex items-center justify-between border-t border-border pt-3">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {c.steps.length} ta bog'liq operatsiya
+                </span>
                 <button
                   onClick={() => {
                     primeAudio();
                     setSelectedCaseId(c.id);
                   }}
-                  className="rounded-md bg-emerald-ink px-4 py-2 text-xs font-medium text-white shadow-sm transition-all hover:bg-emerald-ink/90"
+                  className="rounded-md bg-emerald-ink px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-all hover:bg-emerald-ink/90"
                 >
                   Case'ni boshlash →
                 </button>
@@ -414,39 +418,41 @@ function CasePracticeRunner({
   return (
     <div className="space-y-5 pb-12">
       {/* Sticky Top Header */}
-      <div className="sticky top-14 z-10 space-y-3 rounded-lg border border-border bg-background/95 p-3.5 backdrop-blur shadow-sm">
+      <div className="sticky top-14 z-10 space-y-2 rounded-lg border border-border bg-background/95 p-3 backdrop-blur shadow-sm">
+        {/* Row 1: back | timer | finish */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-3">
-            <button onClick={onBack} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+          <div className="flex items-center gap-2 min-w-0">
+            <button onClick={onBack} className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" />
-              Orqaga
+              <span className="hidden sm:inline">Orqaga</span>
             </button>
             <button
               onClick={handleResetDraft}
-              className="inline-flex items-center gap-1 text-xs text-amber-600 hover:underline dark:text-amber-400"
+              className="inline-flex shrink-0 items-center gap-1 text-xs text-amber-600 hover:underline dark:text-amber-400"
               title="Qayta noldan boshlash va saqlangan qoralanmani tozalash"
             >
               <RotateCcw className="h-3 w-3" />
-              Noldan boshlash
+              <span className="hidden sm:inline">Noldan boshlash</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-            <Timer className="h-4 w-4 text-emerald-ink animate-pulse" />
-            <span>Vaqt: {fmtTime(seconds)}</span>
+          <div className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground shrink-0">
+            <Timer className="h-3.5 w-3.5 text-emerald-ink animate-pulse" />
+            <span>{fmtTime(seconds)}</span>
           </div>
 
           <button
             onClick={handleFinish}
-            className="rounded-md bg-emerald-ink px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-ink/90"
+            className="shrink-0 rounded-md bg-emerald-ink px-2.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-ink/90"
           >
             {t("finishCase")}
           </button>
         </div>
 
+        {/* Row 2: company | operation count */}
         <div className="flex items-center justify-between text-xs font-mono">
-          <span className="text-emerald-ink font-semibold">{practiceCase.company}</span>
-          <span className="text-muted-foreground">{practiceCase.steps.length} ta operatsiya</span>
+          <span className="text-emerald-ink font-semibold truncate">{practiceCase.company}</span>
+          <span className="text-muted-foreground shrink-0 ml-2">{practiceCase.steps.length} ta operatsiya</span>
         </div>
       </div>
 
@@ -505,7 +511,7 @@ function CasePracticeRunner({
               <p className="text-sm font-medium leading-relaxed">{tr(step.text)}</p>
 
               {/* Step Input Form */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                 {/* Dt Input */}
                 <div className="space-y-1">
                   <label className="block text-xs font-mono font-semibold text-emerald-ink">

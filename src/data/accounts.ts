@@ -400,6 +400,15 @@ export const ACCOUNTS: Account[] = [
     },
   },
   {
+    code: "6430",
+    name: { uz: "Boshqa soliqlar bo'yicha qarzdorlik (aylanma soliq)", ru: "Задолженность по прочим налогам (налог с оборота)" },
+    kind: "passive",
+    note: {
+      uz: "Aylanma solig'i hisoblanganda kredit, byudjetga to'langanda debet.",
+      ru: "Начисление налога с оборота — кредит, уплата в бюджет — дебет.",
+    },
+  },
+  {
     code: "6510",
     name: { uz: "Sug'urtalar bo'yicha qarzlar (FSS / Dekret)", ru: "Задолженность по страхованию (ФСС / декретные)" },
     kind: "passive",
@@ -577,6 +586,33 @@ export const ACCOUNTS: Account[] = [
     note: {
       uz: "Yil oxirida barcha daromad va xarajat schyotlari shu yerga yopiladi.",
       ru: "В конце периода все счета доходов и расходов закрываются сюда.",
+    },
+  },
+  {
+    code: "9380",
+    name: { uz: "Tekin (qaytarilmaydigan) moliyaviy yordam", ru: "Безвозмездная финансовая помощь" },
+    kind: "income",
+    note: {
+      uz: "Boshqa operatsion daromad: qaytarilmaydigan yordam olinganda kreditlanadi.",
+      ru: "Прочий операционный доход: при получении безвозмездной помощи кредитуется.",
+    },
+  },
+  {
+    code: "9820",
+    name: { uz: "Foyda solig'i va boshqa soliqlar xarajatlari", ru: "Расходы по налогу на прибыль и прочим налогам" },
+    kind: "expense",
+    note: {
+      uz: "Aylanma soliq va shunga o'xshash soliqlar hisoblanganda debetlanadi.",
+      ru: "Дебетуется при начислении налога с оборота и подобных налогов.",
+    },
+  },
+  {
+    code: "014",
+    name: { uz: "Foydalanishdagi inventar va jihozlar (balansdan tashqari)", ru: "Инвентарь и принадлежности в эксплуатации (забалансовый)" },
+    kind: "active",
+    note: {
+      uz: "Balansdan tashqari schyot: foydalanishga berilgan inventar nazorat uchun shu yerda yuritiladi (bir tomonlama yozuv).",
+      ru: "Забалансовый счёт: переданный в эксплуатацию инвентарь учитывается здесь для контроля (односторонняя запись).",
     },
   },
 ];

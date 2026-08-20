@@ -588,6 +588,33 @@ export const ACCOUNTS: Account[] = [
       ru: "В конце периода все счета доходов и расходов закрываются сюда.",
     },
   },
+  {
+    code: "9380",
+    name: { uz: "Tekin (qaytarilmaydigan) moliyaviy yordam", ru: "Безвозмездная финансовая помощь" },
+    kind: "income",
+    note: {
+      uz: "Boshqa operatsion daromad: qaytarilmaydigan yordam olinganda kreditlanadi.",
+      ru: "Прочий операционный доход: при получении безвозмездной помощи кредитуется.",
+    },
+  },
+  {
+    code: "9820",
+    name: { uz: "Foyda solig'i va boshqa soliqlar xarajatlari", ru: "Расходы по налогу на прибыль и прочим налогам" },
+    kind: "expense",
+    note: {
+      uz: "Aylanma soliq va shunga o'xshash soliqlar hisoblanganda debetlanadi.",
+      ru: "Дебетуется при начислении налога с оборота и подобных налогов.",
+    },
+  },
+  {
+    code: "014",
+    name: { uz: "Foydalanishdagi inventar va jihozlar (balansdan tashqari)", ru: "Инвентарь и принадлежности в эксплуатации (забалансовый)" },
+    kind: "active",
+    note: {
+      uz: "Balansdan tashqari schyot: foydalanishga berilgan inventar nazorat uchun shu yerda yuritiladi (bir tomonlama yozuv).",
+      ru: "Забалансовый счёт: переданный в эксплуатацию инвентарь учитывается здесь для контроля (односторонняя запись).",
+    },
+  },
 ];
 
 export const ACCOUNT_MAP: Record<string, Account> = Object.fromEntries(

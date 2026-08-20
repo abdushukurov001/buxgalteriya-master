@@ -34,22 +34,115 @@ const GROUPS_KEY = "hisobchi.groups";
 const STUDENTS_KEY = "hisobchi.students";
 const SESSION_KEY = "hisobchi.session";
 
+// ─── Default Demo Seed Data ───────────────────────────────────────────────
+const DEFAULT_CENTERS: LearningCenter[] = [
+  {
+    id: "demo-center-1",
+    name: "Toshkent Buxgalteriya Maktabi",
+    login: "admin",
+    password: "admin123",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "demo-center-2",
+    name: "Pro-Finance O'quv Markazi",
+    login: "teacher",
+    password: "teacher123",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+const DEFAULT_GROUPS: Group[] = [
+  {
+    id: "demo-group-1",
+    centerId: "demo-center-1",
+    name: "Buxgalteriya 2026 (A-guruh)",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "demo-group-2",
+    centerId: "demo-center-2",
+    name: "Intensiv Pravodkalar kursi",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+const DEFAULT_STUDENTS: Student[] = [
+  {
+    id: "demo-student-1",
+    centerId: "demo-center-1",
+    groupId: "demo-group-1",
+    fullName: "Jasurbek Umarov",
+    phone: "+998901234567",
+    password: "student123",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "demo-student-2",
+    centerId: "demo-center-2",
+    groupId: "demo-group-2",
+    fullName: "Malika Saidova",
+    phone: "+998909876543",
+    password: "student123",
+    createdAt: new Date().toISOString(),
+  },
+];
+
 // ─── Helpers ───────────────────────────────────────────────────────────────
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+function setItem<T>(key: string, data: T[]): void {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
 function getItem<T>(key: string): T[] {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    return JSON.parse(raw);
   } catch {
     return [];
   }
 }
 
-function setItem<T>(key: string, data: T[]): void {
-  localStorage.setItem(key, JSON.stringify(data));
+// ─── Seed Initialization (runs once on module load) ────────────────────────
+// Ensures demo accounts always exist in localStorage.
+// Uses a version key — increment SEED_VERSION to force re-seed on next load.
+const SEED_VERSION_KEY = "hisobchi.seedVersion";
+const SEED_VERSION = "3"; // bump this to force re-seeding
+
+function initSeedData(): void {
+  const currentVersion = localStorage.getItem(SEED_VERSION_KEY);
+  if (currentVersion === SEED_VERSION) return; // already seeded at this version
+
+  // Merge seed centers — keep existing user-created centers, add missing demo ones
+  const existingCenters = getItem<LearningCenter>(CENTERS_KEY);
+  const demoIds = DEFAULT_CENTERS.map((c) => c.id);
+  const withoutOldDemos = existingCenters.filter((c) => !demoIds.includes(c.id));
+  setItem(CENTERS_KEY, [...DEFAULT_CENTERS, ...withoutOldDemos]);
+
+  // Merge seed groups
+  const existingGroups = getItem<Group>(GROUPS_KEY);
+  const demoGroupIds = DEFAULT_GROUPS.map((g) => g.id);
+  const withoutOldGroups = existingGroups.filter((g) => !demoGroupIds.includes(g.id));
+  setItem(GROUPS_KEY, [...DEFAULT_GROUPS, ...withoutOldGroups]);
+
+  // Merge seed students
+  const existingStudents = getItem<Student>(STUDENTS_KEY);
+  const demoStudentIds = DEFAULT_STUDENTS.map((s) => s.id);
+  const withoutOldStudents = existingStudents.filter((s) => !demoStudentIds.includes(s.id));
+  setItem(STUDENTS_KEY, [...DEFAULT_STUDENTS, ...withoutOldStudents]);
+
+  localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION);
+}
+
+// Run seed on module load
+try {
+  initSeedData();
+} catch {
+  /* silently ignore in SSR or private browsing */
 }
 
 // ─── Learning Centers (Admins) ─────────────────────────────────────────────
@@ -62,7 +155,8 @@ export function getCenterById(id: string): LearningCenter | undefined {
 }
 
 export function getCenterByLogin(login: string): LearningCenter | undefined {
-  return getCenters().find((c) => c.login === login);
+  const clean = login.trim().toLowerCase();
+  return getCenters().find((c) => c.login.trim().toLowerCase() === clean);
 }
 
 export function addCenter(data: { name: string; login: string; password: string }): LearningCenter {
@@ -141,7 +235,11 @@ export function getStudentsByGroup(groupId: string): Student[] {
 }
 
 export function getStudentByPhone(phone: string): Student | undefined {
-  return getStudents().find((s) => s.phone === phone);
+  const queryDigits = phone.replace(/\D/g, "");
+  return getStudents().find((s) => {
+    const sDigits = s.phone.replace(/\D/g, "");
+    return s.phone === phone || (queryDigits.length > 0 && (sDigits.endsWith(queryDigits) || queryDigits.endsWith(sDigits)));
+  });
 }
 
 export function addStudent(data: {

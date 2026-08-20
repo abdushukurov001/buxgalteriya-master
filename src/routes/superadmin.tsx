@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
 import {
@@ -42,15 +42,18 @@ function SuperAdminPage() {
   const navigate = useNavigate();
   const [, setTick] = useState(0);
   const refresh = useCallback(() => setTick((t) => t + 1), []);
+  const [query, setQuery] = useState("");
 
-  // Guard: only superadmin
-  if (role !== "superadmin") {
-    navigate({ to: "/login" });
-    return null;
-  }
+  // Guard: only superadmin — use effect to avoid hook-order violations
+  useEffect(() => {
+    if (role !== "superadmin") {
+      navigate({ to: "/login" });
+    }
+  }, [role, navigate]);
+
+  if (role !== "superadmin") return null;
 
   const centers = getCenters();
-  const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
   const visibleCenters = q
     ? centers.filter(

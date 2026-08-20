@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { BookOpen, Hash, Library, User, LogOut } from "lucide-react";
+import { BookOpen, Hash, Library, User, LogOut, ClipboardList } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLang } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
@@ -34,6 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const nav = [
     { to: "/accounts", label: t("navAccounts"), icon: Hash, match: (p: string) => p.startsWith("/accounts") },
     { to: "/", label: t("navModules"), icon: BookOpen, match: (p: string) => p === "/" || p.startsWith("/modules") },
+    { to: "/practices", label: t("navPractices"), icon: ClipboardList, match: (p: string) => p.startsWith("/practices") },
     { to: "/reference", label: t("navReference"), icon: Library, match: (p: string) => p.startsWith("/reference") },
     { to: "/profile", label: t("navProfile"), icon: User, match: (p: string) => p.startsWith("/profile") },
   ];
@@ -74,7 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-4 pb-28">{children}</main>
 
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto grid max-w-3xl grid-cols-4">
+        <div className="mx-auto grid max-w-3xl grid-cols-5">
           {nav.map((item) => {
             const active = item.match(pathname);
             return (

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
 import {
@@ -54,11 +54,14 @@ function AdminPage() {
   const [filterGroup, setFilterGroup] = useState<string>("all");
   const [search, setSearch] = useState("");
 
-  // Guard: only admin
-  if (role !== "admin" || !session) {
-    navigate({ to: "/login" });
-    return null;
-  }
+  // Guard: only admin — useEffect to avoid hook-order violations
+  useEffect(() => {
+    if (role !== "admin" || !session) {
+      navigate({ to: "/login" });
+    }
+  }, [role, session, navigate]);
+
+  if (role !== "admin" || !session) return null;
 
   const centerId = session.userId;
   const centerName = session.centerName || "O'quv Markaz";

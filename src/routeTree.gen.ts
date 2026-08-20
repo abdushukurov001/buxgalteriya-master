@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PracticesRouteImport } from './routes/practices'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ReferenceRouteImport } from './routes/reference'
 import { Route as SuperadminRouteImport } from './routes/superadmin'
@@ -37,6 +38,11 @@ const AdminRoute = AdminRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticesRoute = PracticesRouteImport.update({
+  id: '/practices',
+  path: '/practices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/practices': typeof PracticesRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/superadmin': typeof SuperadminRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/practices': typeof PracticesRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/superadmin': typeof SuperadminRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/practices': typeof PracticesRoute
   '/profile': typeof ProfileRoute
   '/reference': typeof ReferenceRoute
   '/superadmin': typeof SuperadminRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/admin'
     | '/login'
+    | '/practices'
     | '/profile'
     | '/reference'
     | '/superadmin'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/admin'
     | '/login'
+    | '/practices'
     | '/profile'
     | '/reference'
     | '/superadmin'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/admin'
     | '/login'
+    | '/practices'
     | '/profile'
     | '/reference'
     | '/superadmin'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
+  PracticesRoute: typeof PracticesRoute
   ProfileRoute: typeof ProfileRoute
   ReferenceRoute: typeof ReferenceRoute
   SuperadminRoute: typeof SuperadminRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practices': {
+      id: '/practices'
+      path: '/practices'
+      fullPath: '/practices'
+      preLoaderRoute: typeof PracticesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsRoute: AccountsRoute,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
+  PracticesRoute: PracticesRoute,
   ProfileRoute: ProfileRoute,
   ReferenceRoute: ReferenceRoute,
   SuperadminRoute: SuperadminRoute,

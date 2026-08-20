@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
 import { Eye, EyeOff, GraduationCap, LogIn } from "lucide-react";
@@ -24,12 +24,13 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // If already authenticated, redirect
-  if (isAuthenticated && role) {
-    const target = role === "superadmin" ? "/superadmin" : role === "admin" ? "/admin" : "/";
-    navigate({ to: target });
-    return null;
-  }
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && role) {
+      const target = role === "superadmin" ? "/superadmin" : role === "admin" ? "/admin" : "/";
+      navigate({ to: target });
+    }
+  }, [isAuthenticated, role, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,8 +45,7 @@ function LoginPage() {
         const target =
           username.trim() === "superadmin"
             ? "/superadmin"
-            : // Check if it's a phone number (student) or admin login
-              /^\+?\d[\d\s-]{7,}$/.test(username.trim())
+            : /^\+?\d[\d\s-]{7,}$/.test(username.trim())
               ? "/"
               : "/admin";
         navigate({ to: target });
@@ -56,8 +56,12 @@ function LoginPage() {
     }, 400);
   };
 
+  if (isAuthenticated && role) {
+    return null;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
       {/* Decorative background elements */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div
@@ -100,7 +104,7 @@ function LoginPage() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="superadmin / admin_login / +998..."
+                placeholder="superadmin / admin / +998..."
                 required
                 autoComplete="username"
                 className="flex h-11 w-full rounded-lg border border-input bg-background px-4 text-sm ring-offset-background transition-colors placeholder:text-muted-foreground/60 focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
@@ -162,8 +166,68 @@ function LoginPage() {
           </form>
         </div>
 
+        {/* Quick Demo Login Accounts */}
+        <div className="mt-6 rounded-xl border border-border bg-card p-4 space-y-3 shadow-sm">
+          <p className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-ink text-center">
+            ⚡ Sinov uchun kirish ma'lumotlari (Demo Accounts):
+          </p>
+
+          <div className="grid grid-cols-1 gap-2 text-xs font-mono">
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("superadmin");
+                setPassword("admin123");
+              }}
+              className="flex items-center justify-between rounded-lg border border-purple-300/40 bg-purple-500/5 p-3 text-left transition-all hover:bg-purple-500/10 dark:border-purple-500/30"
+            >
+              <div>
+                <span className="font-sans font-bold text-purple-600 dark:text-purple-400 block">👑 SuperAdmin:</span>
+                <span className="text-muted-foreground">Login: <b className="text-foreground font-mono">superadmin</b></span>
+              </div>
+              <span className="rounded bg-purple-100 px-2 py-1 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                admin123
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("admin");
+                setPassword("admin123");
+              }}
+              className="flex items-center justify-between rounded-lg border border-emerald-ink/30 bg-emerald-soft/40 p-3 text-left transition-all hover:bg-emerald-soft/80"
+            >
+              <div>
+                <span className="font-sans font-bold text-emerald-ink block">🏢 Admin (O'quv Markaz):</span>
+                <span className="text-muted-foreground">Login: <b className="text-foreground font-mono">admin</b></span>
+              </div>
+              <span className="rounded bg-emerald-100 px-2 py-1 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                admin123
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("+998901234567");
+                setPassword("student123");
+              }}
+              className="flex items-center justify-between rounded-lg border border-amber-300/40 bg-amber-500/5 p-3 text-left transition-all hover:bg-amber-500/10 dark:border-amber-500/30"
+            >
+              <div>
+                <span className="font-sans font-bold text-amber-600 dark:text-amber-400 block">🎓 Student (O'quvchi):</span>
+                <span className="text-muted-foreground">Tel: <b className="text-foreground font-mono">+998901234567</b></span>
+              </div>
+              <span className="rounded bg-amber-100 px-2 py-1 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                student123
+              </span>
+            </button>
+          </div>
+        </div>
+
         {/* Footer hint */}
-        <p className="mt-6 text-center text-xs text-muted-foreground/70">
+        <p className="mt-4 text-center text-xs text-muted-foreground/70">
           O'quvchilar — o'quv markaz bergan havola orqali ro'yxatdan o'ting
         </p>
       </div>

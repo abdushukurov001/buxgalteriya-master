@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Flame } from "lucide-react";
+import { Flame, ClipboardList, Award } from "lucide-react";
 import { ACCOUNT_MAP } from "@/data/accounts";
 import { ALL_ENTRIES, MODULES } from "@/data/modules";
+import { PRACTICE_CASES } from "@/data/practicesData";
 import { useLang } from "@/lib/i18n";
 import { useProgress } from "@/lib/progress";
 
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/profile")({
 
 function ProfilePage() {
   const { t, tr } = useLang();
-  const { state, overallPercent, reset } = useProgress();
+  const { state, overallPercent, totalPracticeScore, reset } = useProgress();
 
   const weak = Object.entries(state.mistakes)
     .sort((a, b) => b[1] - a[1])
@@ -42,16 +43,61 @@ function ProfilePage() {
     <div className="space-y-5">
       <h1 className="font-serif text-xl font-semibold">{t("navProfile")}</h1>
 
-      <section className="paper-card space-y-3 p-5">
-        <p className="text-xs tracking-wide text-muted-foreground uppercase">{t("overallProgress")}</p>
-        <p className="font-mono text-4xl">{overallPercent}%</p>
-        <div className="h-2 overflow-hidden rounded-full bg-secondary">
-          <div className="h-full rounded-full bg-emerald-ink" style={{ width: `${overallPercent}%` }} />
-        </div>
-        <p className="flex items-center gap-1.5 text-sm text-gold">
-          <Flame className="h-4 w-4" />
-          {state.streak} {t("streak")}
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <section className="paper-card space-y-2 p-5">
+          <p className="text-xs tracking-wide text-muted-foreground uppercase">{t("overallProgress")}</p>
+          <p className="font-mono text-4xl font-bold">{overallPercent}%</p>
+          <div className="h-2 overflow-hidden rounded-full bg-secondary">
+            <div className="h-full rounded-full bg-emerald-ink" style={{ width: `${overallPercent}%` }} />
+          </div>
+          <p className="flex items-center gap-1.5 text-xs text-gold">
+            <Flame className="h-4 w-4" />
+            {state.streak} {t("streak")}
+          </p>
+        </section>
+
+        {/* Dedicated "Amaliy mashq balli" Card */}
+        <section className="paper-card space-y-2 p-5 border-emerald-ink/40 bg-emerald-soft/20">
+          <div className="flex items-center justify-between">
+            <p className="text-xs tracking-wide text-emerald-ink uppercase font-semibold">
+              {t("practiceScoreLabel")}
+            </p>
+            <Award className="h-4 w-4 text-emerald-ink" />
+          </div>
+          <p className="font-mono text-4xl font-bold text-emerald-ink">{totalPracticeScore}</p>
+          <p className="text-xs text-muted-foreground">
+            Birinchi urinishda to'g'ri bajarilgan xo'jalik operatsiyalari balli
+          </p>
+        </section>
+      </div>
+
+      {/* Standalone Case Practice Stats */}
+      <section className="space-y-2">
+        <h2 className="font-serif text-base font-semibold flex items-center gap-2">
+          <ClipboardList className="h-4 w-4 text-emerald-ink" />
+          {t("practiceStats")}
+        </h2>
+        <ul className="paper-card divide-y divide-border">
+          {PRACTICE_CASES.map((c) => {
+            const res = state.practiceResults[c.id];
+            return (
+              <li key={c.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-3">
+                <span className="min-w-0 truncate text-sm">
+                  <span className="font-mono text-xs font-semibold text-emerald-ink">{c.company}</span> — {tr(c.title)}
+                </span>
+                <span className="shrink-0 font-mono text-xs">
+                  {res ? (
+                    <span className="rounded bg-emerald-soft px-2 py-0.5 font-bold text-emerald-ink">
+                      {res.firstTryCorrect}/{res.totalSteps} ({res.bestPercent}%)
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">{t("notPassed")}</span>
+                  )}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       <section className="space-y-2">
@@ -93,7 +139,7 @@ function ProfilePage() {
 
       <button
         onClick={reset}
-        className="w-full rounded-md border border-border px-4 py-2.5 text-sm text-muted-foreground"
+        className="w-full rounded-md border border-border px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary"
       >
         {t("resetProgress")}
       </button>

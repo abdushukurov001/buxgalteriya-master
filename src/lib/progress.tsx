@@ -7,14 +7,22 @@ export type ModuleResult = {
   passed: boolean;
 };
 
+export type CasePracticeResult = {
+  firstTryCorrect: number;
+  totalSteps: number;
+  bestPercent: number;
+  timeSec: number;
+};
+
 export type ProgressState = {
   results: Record<number, ModuleResult>;
+  practiceResults: Record<string, CasePracticeResult>;
   mistakes: Record<string, number>;
   lastActiveDay: string | null;
   streak: number;
 };
 
-const EMPTY: ProgressState = { results: {}, mistakes: {}, lastActiveDay: null, streak: 0 };
+const EMPTY: ProgressState = { results: {}, practiceResults: {}, mistakes: {}, lastActiveDay: null, streak: 0 };
 const KEY = "hisobchi.progress.v1";
 const PASS_MARK = 90;
 
@@ -30,6 +38,7 @@ function loadFromStorage(): ProgressState {
     const parsed = JSON.parse(raw) as ProgressState;
     return {
       results: parsed.results || {},
+      practiceResults: parsed.practiceResults || {},
       mistakes: parsed.mistakes || {},
       lastActiveDay: parsed.lastActiveDay || null,
       streak: parsed.streak || 0,
@@ -54,8 +63,10 @@ type Ctx = {
   state: ProgressState;
   isUnlocked: (moduleId: number) => boolean;
   saveResult: (moduleId: number, percent: number, wrongTags: string[]) => void;
+  savePracticeResult: (caseId: string, firstTryCorrect: number, totalSteps: number, timeSec: number) => void;
   reset: () => void;
   overallPercent: number;
+  totalPracticeScore: number;
   passMark: number;
 };
 
@@ -107,6 +118,34 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const savePracticeResult = useCallback(
+    (caseId: string, firstTryCorrect: number, totalSteps: number, timeSec: number) => {
+      const percent = Math.round((firstTryCorrect / Math.max(1, totalSteps)) * 100);
+      setState((prev) => {
+        const old = prev.practiceResults[caseId];
+        const next = bumpStreak({
+          ...prev,
+          practiceResults: {
+            ...prev.practiceResults,
+            [caseId]: {
+              firstTryCorrect: Math.max(old?.firstTryCorrect ?? 0, firstTryCorrect),
+              totalSteps,
+              bestPercent: Math.max(old?.bestPercent ?? 0, percent),
+              timeSec: old?.timeSec ? Math.min(old.timeSec, timeSec) : timeSec,
+            },
+          },
+        });
+        try {
+          window.localStorage.setItem(KEY, JSON.stringify(next));
+        } catch {
+          /* ignore */
+        }
+        return next;
+      });
+    },
+    [],
+  );
+
   const reset = useCallback(() => {
     try {
       window.localStorage.removeItem(KEY);
@@ -126,12 +165,18 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     return Math.round((passed / MODULES.length) * 100);
   }, [state.results]);
 
+  const totalPracticeScore = useMemo(() => {
+    return Object.values(state.practiceResults).reduce((sum, res) => sum + res.firstTryCorrect, 0);
+  }, [state.practiceResults]);
+
   const value: Ctx = {
     state,
     isUnlocked,
     saveResult,
+    savePracticeResult,
     reset,
     overallPercent,
+    totalPracticeScore,
     passMark: PASS_MARK,
   };
 

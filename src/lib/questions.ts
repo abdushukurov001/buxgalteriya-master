@@ -251,3 +251,63 @@ export function generateTest(moduleId: number, seed?: number): Question[] {
 
   return shuffle([...cur, ...reviewQuestions], rand);
 }
+
+export type PracticeQuestion = {
+  id: string;
+  fromModule: number;
+  prompt: L;
+  expectedDt: string;
+  expectedKt: string;
+  explain: L;
+  isReview: boolean;
+};
+
+export function generateModulePracticeQuestions(moduleId: number, seed?: number): PracticeQuestion[] {
+  const finalSeed = seed !== undefined ? seed : Math.floor(Math.random() * 1000000);
+  const rand = rng(finalSeed);
+
+  const curMod = MODULES.find((m) => m.id === moduleId);
+  if (!curMod) return [];
+
+  const curEntries = curMod.entries;
+  const prevModules = MODULES.filter((m) => m.id < moduleId);
+  const prevEntries = prevModules.flatMap((m) => m.entries);
+
+  let targetCurCount = 15;
+  let targetPrevCount = 5;
+
+  if (moduleId === 1 || prevEntries.length === 0) {
+    targetCurCount = 20;
+    targetPrevCount = 0;
+  }
+
+  const out: PracticeQuestion[] = [];
+
+  for (let i = 0; i < targetCurCount; i++) {
+    const e = curEntries[i % curEntries.length]!;
+    out.push({
+      id: `p-${moduleId}-${i}-${e.id}`,
+      fromModule: moduleId,
+      prompt: e.op,
+      expectedDt: e.dt,
+      expectedKt: e.kt,
+      explain: e.why,
+      isReview: false,
+    });
+  }
+
+  for (let i = 0; i < targetPrevCount; i++) {
+    const e = prevEntries[Math.floor(rand() * prevEntries.length)]!;
+    out.push({
+      id: `p-rev-${moduleId}-${i}-${e.id}`,
+      fromModule: 1,
+      prompt: e.op,
+      expectedDt: e.dt,
+      expectedKt: e.kt,
+      explain: e.why,
+      isReview: true,
+    });
+  }
+
+  return shuffle(out, rand);
+}

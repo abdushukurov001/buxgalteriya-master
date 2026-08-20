@@ -1198,6 +1198,150 @@ export const MODULES: Module[] = [
       },
     ],
   },
+  {
+    id: 11,
+    title: {
+      uz: "11-Mavzu: Sotish, tekin yordam, aylanma soliq va inventar foydalanishi",
+      ru: "Тема 11: Реализация, безвозмездная помощь, налог с оборота и выдача инвентаря",
+    },
+    summary: {
+      uz: "Tayyor mahsulot va tovar sotilishi (tannarx + daromad), tekin qaytarilmaydigan moliyaviy yordam, aylanma solig'ining hisoblanishi va to'lanishi hamda inventarni foydalanishga topshirish.",
+      ru: "Реализация готовой продукции и товаров (себестоимость + доход), безвозмездная финансовая помощь, начисление и уплата налога с оборота, передача инвентаря в эксплуатацию.",
+    },
+    accounts: ["9110", "9120", "9010", "9020", "2810", "2910", "4010", "6410", "5110", "9380", "9820", "6430", "1080", "9420", "2010", "014"],
+    entries: [
+      {
+        id: "m11e1",
+        dt: "9110",
+        kt: "2810",
+        op: {
+          uz: "Sotilgan tayyor mahsulot tannarxi hisobdan chiqarildi.",
+          ru: "Списана себестоимость реализованной готовой продукции.",
+        },
+        why: {
+          uz: "9110 (xarajat schoti) → debet. Ombordagi 2810 zaxirasi kamaydi → kredit.",
+          ru: "9110 (счёт расходов) → дебет. Запас 2810 на складе уменьшился → кредит.",
+        },
+      },
+      {
+        id: "m11e2",
+        dt: "4010",
+        kt: "9010",
+        op: {
+          uz: "Tayyor mahsulot sotishdan daromad aks ettirildi (ulgurji, ustama va QQS siz).",
+          ru: "Отражён доход от реализации готовой продукции (опт, без наценки и НДС).",
+        },
+        why: {
+          uz: "Xaridor qarzi 4010 oshdi → debet. 9010 daromad schoti passiv xarakterli → kredit.",
+          ru: "Долг покупателя 4010 вырос → дебет. 9010 — счёт дохода, пассивный по характеру → кредит.",
+        },
+      },
+      {
+        id: "m11e3",
+        dt: "9120",
+        kt: "2910",
+        op: {
+          uz: "Sotilgan tovarlar tannarxi hisobdan chiqarildi.",
+          ru: "Списана себестоимость реализованных товаров.",
+        },
+        why: {
+          uz: "Tovar uchun alohida xarajat schoti 9120 → debet. Ombordagi 2910 kamaydi → kredit.",
+          ru: "Для товаров отдельный счёт расходов 9120 → дебет. Склад 2910 уменьшился → кредит.",
+        },
+      },
+      {
+        id: "m11e4",
+        dt: "4010",
+        kt: "9020",
+        op: {
+          uz: "Tovar sotishdan daromad aks ettirildi.",
+          ru: "Отражён доход от реализации товаров.",
+        },
+        why: {
+          uz: "Mahsulot emas, tovar sotilgani uchun daromad 9020 da yuritiladi → kredit. 4010 → debet.",
+          ru: "Продан товар, а не продукция, поэтому доход отражается на 9020 → кредит. 4010 → дебет.",
+        },
+      },
+      {
+        id: "m11e5",
+        dt: "4010",
+        kt: "6410",
+        op: {
+          uz: "Sotish bo'yicha byudjetga soliq majburiyati aks ettirildi.",
+          ru: "Отражено налоговое обязательство перед бюджетом по реализации.",
+        },
+        why: {
+          uz: "Xaridordan olinadigan summa 4010 da oshadi → debet. Byudjet oldidagi qarz 6410 oshdi → kredit.",
+          ru: "Сумма к получению от покупателя 4010 растёт → дебет. Долг перед бюджетом 6410 вырос → кредит.",
+        },
+      },
+      {
+        id: "m11e6",
+        dt: "5110",
+        kt: "9380",
+        op: {
+          uz: "Tekin qaytarilmaydigan moliyaviy yordam olindi.",
+          ru: "Получена безвозмездная (невозвратная) финансовая помощь.",
+        },
+        why: {
+          uz: "Hisob-kitob schotidagi pul 5110 oshdi → debet. Qaytarilmaydigani uchun bu majburiyat emas, daromad: 9380 → kredit.",
+          ru: "Деньги на расчётном счёте 5110 выросли → дебет. Так как не возвращается — это не обязательство, а доход: 9380 → кредит.",
+        },
+      },
+      {
+        id: "m11e7",
+        dt: "9820",
+        kt: "6430",
+        op: {
+          uz: "Aylanma solig'i hisoblandi.",
+          ru: "Начислен налог с оборота.",
+        },
+        why: {
+          uz: "Soliq xarajati 9820 → debet. Byudjet oldidagi qarz 6430 paydo bo'ldi → kredit.",
+          ru: "Расход по налогу 9820 → дебет. Возник долг перед бюджетом 6430 → кредит.",
+        },
+      },
+      {
+        id: "m11e8",
+        dt: "6430",
+        kt: "5110",
+        op: {
+          uz: "Aylanma solig'i byudjetga to'landi.",
+          ru: "Налог с оборота уплачен в бюджет.",
+        },
+        why: {
+          uz: "Qarz yopildi: 6430 → debet. Hisob-kitob schotidagi pul kamaydi: 5110 → kredit.",
+          ru: "Долг погашен: 6430 → дебет. Деньги на расчётном счёте уменьшились: 5110 → кредит.",
+        },
+      },
+      {
+        id: "m11e9",
+        dt: "9420",
+        kt: "1080",
+        op: {
+          uz: "Inventar ofis (ma'muriy) ehtiyoji uchun foydalanishga berildi (balansdan tashqari 014 ga olinadi).",
+          ru: "Инвентарь передан в эксплуатацию для офиса (принимается на забалансовый 014).",
+        },
+        why: {
+          uz: "Ofis ehtiyoji — davr xarajati: 9420 → debet. Ombordagi 1080 kamaydi → kredit. Nazorat uchun 014 da yuritiladi.",
+          ru: "Нужды офиса — расход периода: 9420 → дебет. Запас 1080 уменьшился → кредит. Для контроля учитывается на 014.",
+        },
+      },
+      {
+        id: "m11e10",
+        dt: "2010",
+        kt: "1080",
+        op: {
+          uz: "Inventar ishlab chiqarish ehtiyoji uchun foydalanishga berildi (balansdan tashqari 014 ga olinadi).",
+          ru: "Инвентарь передан в эксплуатацию для производства (принимается на забалансовый 014).",
+        },
+        why: {
+          uz: "Ishlab chiqarishga sarflansa tannarxga kiradi: 2010 → debet. 1080 kamaydi → kredit.",
+          ru: "Расход на производство входит в себестоимость: 2010 → дебет. 1080 уменьшился → кредит.",
+        },
+      },
+    ],
+  },
 ];
 
 

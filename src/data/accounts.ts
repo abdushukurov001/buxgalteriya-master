@@ -393,6 +393,15 @@ export const ACCOUNTS: Account[] = [
   {
     code: "6420",
     name: { uz: "Jismoniy shaxslardan ushlab qolinadigan daromad solig'i", ru: "Удержанный НДФЛ" },
+  },
+  {
+    code: "6430",
+    name: { uz: "Boshqa soliqlar bo'yicha qarzdorlik (aylanma soliq)", ru: "Задолженность по прочим налогам (налог с оборота)" },
+    kind: "passive",
+    note: {
+      uz: "Aylanma solig'i hisoblanganda kredit, byudjetga to'langanda debet.",
+      ru: "Начисление налога с оборота — кредит, уплата в бюджет — дебет.",
+    },
     kind: "passive",
     note: {
       uz: "Xodim daromadidan ushlangan soliq — korxona uni byudjetga o'tkazishi shart.",

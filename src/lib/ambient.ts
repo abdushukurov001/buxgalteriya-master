@@ -160,6 +160,7 @@ class LofiPlayer {
     if (!this.ctx || !this.compressor || !this.isPlaying) return;
 
     const chord = this.chords[this.chordIndex];
+    if (!chord) return;
     this.chordIndex = (this.chordIndex + 1) % this.chords.length;
     const t0 = this.ctx.currentTime;
 
@@ -196,7 +197,7 @@ class LofiPlayer {
     if (!this.ctx || !this.compressor) return;
 
     const notes = [523.25, 659.25, 783.99, 880.00, 1046.50];
-    const freq = notes[Math.floor(Math.random() * notes.length)];
+    const freq = notes[Math.floor(Math.random() * notes.length)] ?? 523.25;
 
     const osc = this.ctx.createOscillator();
     const env = this.ctx.createGain();

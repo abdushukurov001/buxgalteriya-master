@@ -2,7 +2,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, RotateCcw, Timer, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EntryCard } from "@/components/EntryCard";
-import { ACCOUNT_MAP } from "@/data/accounts";
 import { MODULES } from "@/data/modules";
 import { ambientPlayer } from "@/lib/ambient";
 import { useLang } from "@/lib/i18n";
@@ -25,14 +24,6 @@ export const Route = createFileRoute("/modules/$id")({
   }),
   component: ModulePage,
 });
-
-function kindLabelKey(kind: string) {
-  if (kind === "active") return "active" as const;
-  if (kind === "passive") return "passive" as const;
-  if (kind === "contra-active") return "contra" as const;
-  if (kind === "income") return "income" as const;
-  return "expense" as const;
-}
 
 function ModulePage() {
   const { id } = Route.useParams();
@@ -84,28 +75,6 @@ function ModulePage() {
 
       {tab === "read" ? (
         <div className="space-y-5">
-          <section className="space-y-2">
-            <h2 className="font-serif text-base font-semibold">{t("accounts")}</h2>
-            <ul className="paper-card divide-y divide-border">
-              {mod.accounts.map((code) => {
-                const acc = ACCOUNT_MAP[code];
-                if (!acc) return null;
-                return (
-                  <li key={code} className="space-y-1 p-3">
-                    <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2">
-                      <span className="shrink-0 rounded bg-secondary px-2 py-0.5 font-mono text-xs">{code}</span>
-                      <span className="min-w-0 truncate text-sm font-medium">{tr(acc.name)}</span>
-                    </div>
-                    <p className="text-[11px] tracking-wide text-emerald-ink uppercase">
-                      {t(kindLabelKey(acc.kind))}
-                    </p>
-                    <p className="text-[13px] text-muted-foreground">{tr(acc.note)}</p>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-
           <section className="space-y-3">
             <h2 className="font-serif text-base font-semibold">{t("entries")}</h2>
             {mod.entries.map((e) => (
